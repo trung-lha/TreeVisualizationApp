@@ -3,6 +3,7 @@ package avl.tree.gui;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.*;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -27,8 +28,10 @@ public class UI extends JFrame{
 	private static final long serialVersionUID = 1L;
 	//	private JButton btnAddNumber;
 	//	private JTextField textField;
-
-
+	String treeType[]={"AVLTree","BSTTree"}; 
+	JComboBox comboboxTree=new JComboBox(treeType); 
+	
+	
 	private JButton addRandButton;
 	private TreeLogic treeLogic;
 
@@ -49,7 +52,7 @@ public class UI extends JFrame{
 	public UI(){
 		JFrame frame = new JFrame("AVL Tree");
 		frame.setSize(Param.WIDTH + 50, Param.HEIGHT);
-		frame.setResizable(false);
+		frame.setResizable(true);
 		treeLogic = new TreeLogic();
 
 		treePanel = new TreePanel();
@@ -83,6 +86,9 @@ public class UI extends JFrame{
 		clearButton = new JButton("clear");
 		clearButton.setBackground(Param.COLOR_BUTT_CLEAR);
 		clearButton.setFont(Param.BUTTON_FONT);
+		
+		comboboxTree.setBackground(Param.COLOR_BUTT_CREATE);
+		comboboxTree.setFont(Param.BUTTON_FONT);
 
 		valueField = new JTextField("");
 		valueField.setColumns(7);
@@ -95,6 +101,8 @@ public class UI extends JFrame{
 		buttonPanel.add(searchButton);
 		buttonPanel.add(removeButton);
 		buttonPanel.add(clearButton);
+		
+		buttonPanel.add(comboboxTree);
 		buttonPanel.setBackground(Param.COLOR_PANEL);
 		
 		treePanel.setBackground(Color.WHITE);
@@ -182,7 +190,6 @@ public class UI extends JFrame{
 					return;
 				}
 				
-				
 				TreeLogic.setAdded(-1000);
 				TreeLogic.setRemoved(value);
 				
@@ -207,11 +214,8 @@ public class UI extends JFrame{
 			                // your code here
 			            }
 			        }, 
-			        2000 
+			        1000 
 				);				
-				
-				
-				
 			}
 		});
 		
@@ -227,34 +231,36 @@ public class UI extends JFrame{
 
 	}
 	
-	private void addProceed (int value) {
+	private void addProceed (int value) {		
 		treeLogic.addNode(value);
 		treePanel.repaint();
-		logField.setText("node " + value + " added");
+		logField.setText("node " + value + " added" );
 		
-		Tree localTree =  treeLogic.searchNode(TreeLogic.getTree(), value);
-		Tree degTree = treeLogic.chekDeg(localTree);
+		if(comboboxTree.getSelectedIndex()==0) { // nếu thuật toán được chọn là AVLtree
+			Tree localTree =  treeLogic.searchNode(TreeLogic.getTree(), value);
+			Tree degTree = treeLogic.chekDeg(localTree);
 		
-		if (degTree != null){
-			TreeLogic.setDegenerated(degTree.getValue());
-			logField.setText("node " + value + " added with ...");
-			enableComponents(buttonPanel, false);
-			new java.util.Timer().schedule( 
-				new java.util.TimerTask() {
-					@Override
-					public void run() {
-						TreeLogic.setDegenerated(-1000);
-						String rotateType = treeLogic.typeOfRotation(degTree);
-						treePanel.repaint();							
-						enableComponents(buttonPanel, true);
-						logField.setText("node " + value + " added with " + rotateType);
-					}
-				}, 
-				2000 
-			);		
-		}
+			if (degTree != null){
+				TreeLogic.setDegenerated(degTree.getValue());
+				logField.setText("node " + value + " added with ...");
+				enableComponents(buttonPanel, false);
+				new java.util.Timer().schedule( 
+					new java.util.TimerTask() {
+						@Override
+						public void run() {
+							TreeLogic.setDegenerated(-1000);
+							String rotateType = treeLogic.typeOfRotation(degTree);
+							treePanel.repaint();							
+							enableComponents(buttonPanel, true);
+							logField.setText("node " + value + " added with " + rotateType);
+						}
+					}, 
+					1000 
+				);		
+			}
+		} //end add AVLTree
 		
-		
+				
 	}
 	
 	private void enableComponents(Container container, boolean enable) {

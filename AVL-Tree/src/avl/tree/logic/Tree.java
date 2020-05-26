@@ -2,14 +2,14 @@ package avl.tree.logic;
 
 public class Tree {
 
-	private int value;
+	public int value;
 	private int height;
 	private int x;
 	private int y;
 	
 	private Tree parent;
-	private Tree leftChild;
-	private Tree rightChild;
+	public Tree leftChild;
+	public Tree rightChild;
 	
 
 	public Tree() {

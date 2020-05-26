@@ -381,4 +381,52 @@ public class TreeLogic {
 		}
 	}
 	
+	// remove binary tree
+	
+	// Gọi phương thức deleteRec 
+	 public void deleteKey(Tree forRemove) 
+	   { 
+	       tree = deleteRec(tree, forRemove.value); 
+	   } 
+	 
+	   /* Hàm đệ qui để xóa phần tử khỏi mảng */
+	   public Tree deleteRec(Tree tree, int key) 
+	   { 
+	       /* trường hợp gốc : nếu node root null */
+	       if (tree == null)  return tree; 
+	 
+	       /* ngược lại chúng ta sẽ duyệt dọc cây  */
+	       if (key < tree.value) 
+	           tree.leftChild = deleteRec(tree.leftChild, key); 
+	       else if (key > tree.value) 
+	           tree.rightChild = deleteRec(tree.rightChild, key); 
+	 
+	       // nếu key có cùng giá trị với node key thì chính là node cần xóa 
+	       else
+	       { 
+	           // node không có hoặc chỉ có 1 node con 
+	           if (tree.leftChild == null) 
+	               return tree.rightChild; 
+	           else if (tree.rightChild == null) 
+	               return tree.leftChild;
+	           // node có 2 node con.
+	           tree.value = minValue(tree.rightChild); 
+	 
+	           // Xóa phần từ nhỏ nhất(trai nhat) cua cay con bên phải
+	           tree.rightChild = deleteRec(tree.rightChild, tree.value); 
+	       } 
+	 
+	       return tree; 
+	   } 
+	 
+	   public int minValue(Tree tree) 
+	   { 
+	       int minv = tree.value; 
+	       while (tree.leftChild != null) 
+	       { 
+	           minv = tree.leftChild.value; 
+	           tree = tree.leftChild; 
+	       } 
+	       return minv; 
+	   } 
 }

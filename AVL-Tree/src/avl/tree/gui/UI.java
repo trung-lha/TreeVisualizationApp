@@ -207,12 +207,15 @@ public class UI extends JFrame{
 			        new java.util.TimerTask() {
 			            @Override
 			            public void run() {
-			            	//treeLogic.removeNode(forRemove); //xoa o avltree
-			            	treeLogic.deleteKey(forRemove); //xoa o bsttree
+			            	if(comboboxTree.getSelectedIndex()==0) {
+			            	    treeLogic.removeNode(forRemove); //xoa o avltree
+			            	}
+			            	if(comboboxTree.getSelectedIndex()==1) {
+			            		treeLogic.removeNodeBST(forRemove); //xoa o bsttree
+				            }
 							treePanel.repaint();
 							enableComponents(buttonPanel, true);
 							logField.setText("node " + value + " removed");
-			                // your code here
 			            }
 			        }, 
 			        1000 

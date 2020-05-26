@@ -120,7 +120,7 @@ public class TreeLogic {
 		return searchResult;
 	}
 
-	public Tree chekDeg (Tree localTree){
+	public Tree chekDeg (Tree localTree){  // kiem tra xem co mat can bang khong, neu ko co return null
 		
 		int leftChildHeight = getLeftHeight(localTree);
 		int righChildtHeight = getRightHeight(localTree);
@@ -136,8 +136,8 @@ public class TreeLogic {
 
 	public String typeOfRotation(Tree degTree) {
 		String rotate;
-		int leftChildHeight = getLeftHeight(degTree);
-		int righChildtHeight = getRightHeight(degTree);
+		int leftChildHeight = getLeftHeight(degTree); // chieu cao con trai
+		int righChildtHeight = getRightHeight(degTree);	// chieu cao con phai
 
 		if (leftChildHeight > righChildtHeight) {
 			Tree tmpLeftChild = degTree.getLeftChild();
@@ -338,7 +338,7 @@ public class TreeLogic {
 	
 	
 	public void removeNode (Tree forRemove) {
-		Tree parent = forRemove.getParent();
+		Tree parent = forRemove.getParent();		// cha cua node can xoa
 		Tree leftChild = forRemove.getLeftChild();
 		Tree rightChild = forRemove.getRightChild();
 		
@@ -347,7 +347,7 @@ public class TreeLogic {
 		
 		if (highestTree == null) {
 			// no children
-			if (parent.getLeftChild() != null && parent.getLeftChild().getValue() == forRemove.getValue()) {
+			if (parent.getLeftChild() != null && parent.getLeftChild().getValue() == forRemove.getValue()) { //node can xoa nam ben trai
 				parent.setLeftChild(null);
 			} else {
 				parent.setRightChild(null);
@@ -381,52 +381,36 @@ public class TreeLogic {
 		}
 	}
 	
-	// remove binary tree
-	
-	// Gọi phương thức deleteRec 
-	 public void deleteKey(Tree forRemove) 
-	   { 
-	       tree = deleteRec(tree, forRemove.value); 
-	   } 
-	 
-	   /* Hàm đệ qui để xóa phần tử khỏi mảng */
-	   public Tree deleteRec(Tree tree, int key) 
-	   { 
-	       /* trường hợp gốc : nếu node root null */
-	       if (tree == null)  return tree; 
-	 
-	       /* ngược lại chúng ta sẽ duyệt dọc cây  */
-	       if (key < tree.value) 
-	           tree.leftChild = deleteRec(tree.leftChild, key); 
-	       else if (key > tree.value) 
-	           tree.rightChild = deleteRec(tree.rightChild, key); 
-	 
-	       // nếu key có cùng giá trị với node key thì chính là node cần xóa 
-	       else
-	       { 
-	           // node không có hoặc chỉ có 1 node con 
-	           if (tree.leftChild == null) 
-	               return tree.rightChild; 
-	           else if (tree.rightChild == null) 
-	               return tree.leftChild;
-	           // node có 2 node con.
-	           tree.value = minValue(tree.rightChild); 
-	 
-	           // Xóa phần từ nhỏ nhất(trai nhat) cua cay con bên phải
-	           tree.rightChild = deleteRec(tree.rightChild, tree.value); 
-	       } 
-	 
-	       return tree; 
-	   } 
-	 
-	   public int minValue(Tree tree) 
-	   { 
-	       int minv = tree.value; 
-	       while (tree.leftChild != null) 
-	       { 
-	           minv = tree.leftChild.value; 
-	           tree = tree.leftChild; 
-	       } 
-	       return minv; 
-	   } 
+	//XOA N0DE BST
+	public void removeNodeBST(Tree forRemove) {
+		Tree parent = forRemove.getParent();		// cha cua node can xoa
+		Tree leftChild = forRemove.getLeftChild();
+		Tree rightChild = forRemove.getRightChild();
+		
+		// get highest child from removable tree
+		Tree highestTree = getLeftHeight(forRemove) > getRightHeight(forRemove) ? leftChild : rightChild;
+		
+		if (highestTree == null) {
+			// no children
+			if (parent.getLeftChild() != null && parent.getLeftChild().getValue() == forRemove.getValue()) { //node can xoa nam ben trai
+				parent.setLeftChild(null);
+			} else {
+				parent.setRightChild(null);
+			}
+			removed = -1000;
+		} else {
+			Tree forReplace = highestTree;
+			if (highestTree.getValue() > forRemove.getValue()) {
+				while (forReplace.getLeftChild() != null) {
+					forReplace = forReplace.getLeftChild();
+				}
+			} else {
+				while (forReplace.getRightChild() != null) {
+					forReplace = forReplace.getRightChild();
+				}
+			}
+			forRemove.setValue(forReplace.getValue());
+			removeNodeBST(forReplace);
+		}
+	}
 }

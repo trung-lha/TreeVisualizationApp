@@ -28,7 +28,7 @@ public class UI extends JFrame{
 	private static final long serialVersionUID = 1L;
 	//	private JButton btnAddNumber;
 	//	private JTextField textField;
-	String treeType[]={"AVLTree","BSTTree"}; 
+	String treeType[]={"AVL Tree","BST Tree"}; 
 	JComboBox comboboxTree=new JComboBox(treeType); 
 	
 	
@@ -50,7 +50,7 @@ public class UI extends JFrame{
 	private JLabel logField;
 
 	public UI(){
-		JFrame frame = new JFrame("AVL Tree");
+		JFrame frame = new JFrame("BST Tree,AVL Tree visualization App");
 		frame.setSize(Param.WIDTH + 50, Param.HEIGHT);
 		frame.setResizable(true);
 		treeLogic = new TreeLogic();
@@ -59,31 +59,31 @@ public class UI extends JFrame{
 		
 		logPanel = new JPanel();
 
-		logField = new JLabel("add new value, please");
+		logField = new JLabel("Add a Number, please");
 		logField.setFont(Param.BUTTON_FONT);
 		logPanel.add(logField);
 		
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		addButton = new JButton("Add Value");
+		addButton = new JButton("Add number");
 		addButton.setBackground(Param.COLOR_BUTT_CREATE);
 		addButton.setFont(Param.BUTTON_FONT);
 		
-		removeButton = new JButton("remove");
+		removeButton = new JButton("Remove node");
 		removeButton.setBackground(Param.COLOR_BUTT_REMOVE);
 		removeButton.setFont(Param.BUTTON_FONT);
 		
-		searchButton = new JButton("search");
+		searchButton = new JButton("Search node");
 		searchButton.setBackground(Param.COLOR_BUTT_CREATE);
 		searchButton.setFont(Param.BUTTON_FONT);
 		
-		addRandButton = new JButton("Add Rand Value");
+		addRandButton = new JButton("Add random number");
 		addRandButton.setBackground(Param.COLOR_BUTT_CREATE);
 		addRandButton.setFont(Param.BUTTON_FONT);
 		
 		
-		clearButton = new JButton("clear");
+		clearButton = new JButton("Remove tree");
 		clearButton.setBackground(Param.COLOR_BUTT_CLEAR);
 		clearButton.setFont(Param.BUTTON_FONT);
 		

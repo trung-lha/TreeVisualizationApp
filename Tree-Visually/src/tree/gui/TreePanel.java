@@ -14,87 +14,91 @@ import tree.logic.Node;
 
 public class TreePanel extends JPanel{
 	private Graphics2D g2; 
-	private BSTTree root;
-	public void setTreePanel(BSTTree root) {
-		this.root = root;
+	private Node root;
+	public void setNodePanel(Node node) {
+		this.root = node;
 	}
-	public BSTTree getTreePanel() {
+	public Node getNodePanal() {
 		return this.root;
 	}
 	public TreePanel(){
 	}
 	
-	public void drawTree(Node node) {
-		if (node == null) {
+	public void drawTree(Node root) {
+		if (root == null) {
+//			System.out.println("Node want to paint is null");
 			return;
 		}
-		Node parent = node.getParent();
+		Node parent = root.getParent();
 		
 		// set locate for Node
 		if (parent == null) {
 			// 1st Level
-			node.setX(Param.WIDTH/2);
-			node.setY(Param.TOP_MARGIN);
+			root.setX(Param.WIDTH/2);
+			root.setY(Param.TOP_MARGIN);
 
 		} else if (parent.getParent() == null) {
 			// 2nd Level
-			if (node.getValue() < parent.getValue()){
-				node.setX(Param.WIDTH/4);
-				node.setY(parent.getY() + Param.NODE_MARGIN);		
+			if (root.getValue() < parent.getValue()){
+				root.setX(Param.WIDTH/4);
+				root.setY(parent.getY() + Param.NODE_MARGIN);		
 			} else {
-				node.setX(Param.WIDTH - Param.WIDTH/4);
-				node.setY(parent.getY() + Param.NODE_MARGIN);	
+				root.setX(Param.WIDTH - Param.WIDTH/4);
+				root.setY(parent.getY() + Param.NODE_MARGIN);	
 			}
 		} else {
 			// other Levels
-			if (node.getValue() < parent.getValue()){
-				node.setX(parent.getX() - Math.abs(parent.getX() - parent.getParent().getX())/2);
-				node.setY(parent.getY() + Param.NODE_MARGIN);
+			if (root.getValue() < parent.getValue()){
+				root.setX(parent.getX() - Math.abs(parent.getX() - parent.getParent().getX())/2);
+				root.setY(parent.getY() + Param.NODE_MARGIN);
 			} else {
-				node.setX(parent.getX() + Math.abs(parent.getX() - parent.getParent().getX())/2);
-				node.setY(parent.getY() + Param.NODE_MARGIN);
+				root.setX(parent.getX() + Math.abs(parent.getX() - parent.getParent().getX())/2);
+				root.setY(parent.getY() + Param.NODE_MARGIN);
 			}
 			
 		}
 		// draw Line for Node
 		if (parent != null) {
 			g2.setColor(Param.COLOR_LINE);
-			g2.drawLine(parent.getX()+Param.DIAMETR/2, parent.getY()+Param.DIAMETR-1, node.getX() + 17, node.getY() + 17);
+			g2.drawLine(parent.getX()+Param.DIAMETR/2, parent.getY()+Param.DIAMETR-1, root.getX() + 17, root.getY() + 17);
 		}
 		//set color for Node
-		g2.setColor(Param.COLOR_NODE);
-		if (node.getStatus() == Node.addColor) {
+		
+		if (root.getStatus() == Node.nodeColor) {
+			g2.setColor(Param.COLOR_NODE);
+		}
+		if (root.getStatus() == Node.addColor) {
 			g2.setColor(Param.COLOR_ADDED);
 		} 
-		if (node.getStatus() == Node.removeColor) {
+		if (root.getStatus() == Node.removeColor) {
 			g2.setColor(Param.COLOR_REMOVED);
 		}
-		if (node.getStatus() == Node.degColor) {
+		if (root.getStatus() == Node.degColor) {
 			g2.setColor(Param.COLOR_DEG);
 		}
-		if (node.getStatus() == Node.warningColor) {
-			g2.setColor(Param.COLOR_WARNIGN);
+		if (root.getStatus() == Node.warningColor) {
+			g2.setColor(Param.COLOR_WARNING);
 		}
-		g2.fillOval(node.getX(), node.getY(), Param.DIAMETR, Param.DIAMETR);
+		g2.fillOval(root.getX(), root.getY(), Param.DIAMETR, Param.DIAMETR);
 		
 		g2.setColor(Param.COLOR_VALUE);
-		if (node.getStatus() == 1) {
+		if (root.getStatus() == 1) {
 			g2.setColor(Color.WHITE);
 		}
 		g2.setFont(Param.NODE_FONT);
-		String nodeString = node.getValue() + "";
+		String nodeString = root.getValue() + "";
 		FontSize fontSize = getStringSize(nodeString);
-		g2.drawString(nodeString, node.getX() + (Param.DIAMETR-fontSize.getWidth())/2, node.getY() + 22);
+		g2.drawString(nodeString, root.getX() + (Param.DIAMETR-fontSize.getWidth())/2, root.getY() + 22);
 		
-		drawTree(node.getLeftChild());
-		drawTree(node.getRightChild());
+		drawTree(root.getLeftChild());
+		drawTree(root.getRightChild());
 	}
 
 	protected void paintComponent(Graphics g) {  
 		super.paintComponent(g);  
 		g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		drawTree(this.root.getTree());
+		drawTree(this.root);
 	}  
 	
 	private FontSize getStringSize (String str) {

@@ -2,6 +2,8 @@ package tree.logic;
 
 import javax.swing.JPanel;
 
+import com.sun.javafx.scene.NodeHelper.NodeAccessor;
+
 public class Node {
 
 	private int value;
@@ -13,6 +15,7 @@ public class Node {
 	public static final int degColor = 3;
 	public static final int warningColor = 4;
 	public static final int searchColor = 5;
+	public static final int nodeColor = 6;
 	
 	private Node parent;
 	private Node leftChild;
@@ -30,6 +33,7 @@ public class Node {
 	public Node(int value) {
 		this();
 		this.value = value;
+		this.status = Node.addColor;
 	}
 	
 	public void setStatus(int status) {

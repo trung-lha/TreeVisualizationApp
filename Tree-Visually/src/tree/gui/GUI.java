@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -22,10 +23,11 @@ import tree.logic.Node;
 
 public class GUI extends JFrame {
 
-	String treeType[] = { "AVL Tree", "BST Tree" };
+	String treeType[] = {"AVL Tree", "BST Tree" };
 	JComboBox comboboxTree = new JComboBox(treeType);
 
-	private BSTTree treeLogic;
+	private BSTTree treeBST;
+	private AVLTree treeAVL;
 	private TreePanel treePanel;
 	private JPanel buttonPanel;
 	private JPanel logPanel;
@@ -57,15 +59,25 @@ public class GUI extends JFrame {
 		valueField.setFont(Param.TEXT_FIELD_FONT);
 		valueField.setHorizontalAlignment(JTextField.CENTER);
 		buttonPanel.add(valueField);
-
+		//****************** ADD Setting ************************
+		treeBST = new BSTTree();
+		treeAVL = new AVLTree();
+		addButton = new JButton("Add number");
+		addButtonSetting();
+		buttonPanel.add(addButton);
+		addRandButton = new JButton("Add random number");
+		buttonPanel.add(addRandButton);
+		
+		//****************** Remove Setting **********************
 		clearButton = new JButton("Remove tree");
 		clearButtonSetting();
+		removeButton = new JButton("Remove node");
+		buttonPanel.add(removeButton);
+		
+		// ************ clear setting ****************************
 		searchButton = new JButton("Search node");
 		searchButtonSetting();
-
-		addButton = new JButton("Add number");
-		addRandButton = new JButton("Add random number");
-		removeButton = new JButton("Remove node");
+		
 
 		comboboxTree.setBackground(Param.COLOR_BUTT_CREATE);
 		comboboxTree.setFont(Param.BUTTON_FONT);
@@ -77,22 +89,87 @@ public class GUI extends JFrame {
 		getContentPane().add(treePanel, BorderLayout.CENTER);
 		getContentPane().add(logPanel, BorderLayout.SOUTH);
 
-		if (comboboxTree.getSelectedIndex() == 0) {
-			treeLogic = new AVLTree();
-			AVLTree treeAVL = (AVLTree) treeLogic;
-			treePanel.setTreePanel(treeAVL);
-			addButtonSettingForAVL(treeAVL);
-			addRandSettingForAVL(treeAVL);
-			removeButtonSettingForAVL(treeAVL);
-		} else {
-			treeLogic = new BSTTree();
-			treePanel.setTreePanel(treeLogic);
-			addButtonSettingForBST(treeLogic);
-			addRandSettingForBST(treeLogic);
-			removeButtonSettingForBST(treeLogic);
-		}
+			
+		
 		setVisible(true);
 
+	}
+	private void addButtonSetting() {
+		addButton.setBackground(Param.COLOR_BUTT_CREATE);
+		addButton.setFont(Param.BUTTON_FONT);
+		addButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				// *************** Add with BST *************************
+				if (comboboxTree.getSelectedItem() == "BST Tree") {
+					
+					treePanel.setNodePanel(treeBST.getTree());
+					int value;
+					try {
+						value = Integer.parseInt(valueField.getText());
+					} catch (NumberFormatException e) {
+						System.out.println("not a number");
+						logField.setText("'" + valueField.getText() + "' is not a number");
+						return;
+					}
+					enableComponents(buttonPanel, false);
+					try {
+						treeBST.addNode(value);
+						treePanel.setNodePanel(treeBST.getTree());
+						treePanel.repaint();
+						logField.setText("node " + value + " added");
+						enableComponents(buttonPanel, true);
+					} catch (Exception addBST) {
+						enableComponents(buttonPanel, true);
+						logField.setText(addBST.getMessage());
+					}
+				}
+				// ******************* Add with AVL *******************
+				else {
+//					JOptionPane.showMessageDialog(null, "Vao AVL tree");
+					treePanel.setNodePanel(treeAVL.getTree());
+					int value;
+					try {
+						value = Integer.parseInt(valueField.getText());
+					} catch (NumberFormatException e) {
+						System.out.println("not a number");
+						logField.setText("" + valueField.getText() + "is not a number");
+						return;
+					}
+					try {
+						treeAVL.addNode(value);
+						treePanel.setNodePanel(treeAVL.getTree());
+						repaint();
+						logField.setText("node " + value + " added");
+						Node nodeAdded = treeAVL.searchNode(value);
+						Node degNode = treeAVL.chekDeg(nodeAdded);
+						repaint();
+						if (degNode != null) {
+							logField.setText("node " + value + " added with ...");
+							enableComponents(buttonPanel, false);
+							new java.util.Timer().schedule(new java.util.TimerTask() {
+								@Override
+								public void run() {
+									degNode.setStatus(Node.nodeColor);
+									String rotateType = treeAVL.typeOfRotation(degNode);
+									Node root = nodeAdded;
+									while (root.getParent() != null) {
+										root = nodeAdded.getParent();
+									}
+									treePanel.setNodePanel(root);
+									repaint();
+									enableComponents(buttonPanel, true);
+									logField.setText("node " + value + " added with " + rotateType);
+								}
+							}, 2000);
+						}
+					} catch (Exception avl) {
+						logField.setText(avl.getMessage());
+					}
+				} 
+			}
+		});
+		
 	}
 
 	public void paint(Graphics g) {
@@ -102,45 +179,12 @@ public class GUI extends JFrame {
 
 	public void addBST(BSTTree tree, int value) {
 		try {
-			enableComponents(buttonPanel, false);
-			tree.addNode(value);
-			treePanel.repaint();
-			logField.setText("node " + value + " added");
-			enableComponents(buttonPanel, true);
+			
 		} catch (Exception add) {
 			logField.setText(add.getMessage());
 		}
 	}
-
-	public void addAVL(AVLTree tree, int value) {
-		try {
-			Node newNode = tree.addNode(tree.getTree(), value);
-			treePanel.repaint();
-			logField.setText("node " + value + " added");
-
-			Node degNode = tree.chekDeg(newNode);
-
-			if (degNode != null) {
-				degNode.setStatus(Node.degColor);
-				logField.setText("node " + value + " added with ...");
-				enableComponents(buttonPanel, false);
-				new java.util.Timer().schedule(new java.util.TimerTask() {
-					@Override
-					public void run() {
-						degNode.setStatus(Node.addColor);
-						;
-						String rotateType = tree.typeOfRotation(degNode);
-						treePanel.repaint();
-						enableComponents(buttonPanel, true);
-						logField.setText("node " + value + " added with " + rotateType);
-					}
-				}, 2000);
-			}
-		} catch (Exception avl) {
-			logField.setText(avl.getMessage());
-		}
-	}
-
+	
 	private void enableComponents(Container container, boolean enable) {
 		Component[] components = container.getComponents();
 
@@ -154,8 +198,9 @@ public class GUI extends JFrame {
 		clearButton.setFont(Param.BUTTON_FONT);
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-//				System.out.println("CLEAR");
-				treeLogic.clearTree();
+				treeAVL.clearTree();
+				treeBST.clearTree();
+				treePanel.setNodePanel(null);
 				treePanel.repaint();
 				logField.setText("cleared");
 			}
@@ -163,76 +208,42 @@ public class GUI extends JFrame {
 		buttonPanel.add(clearButton);
 	}
 
-	public void addRandSettingForBST(BSTTree tree) {
+
+	public void addRandSettingForAVL() {
 		addRandButton.setBackground(Param.COLOR_BUTT_CREATE);
 		addRandButton.setFont(Param.BUTTON_FONT);
 		addRandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int value = (int) (Math.random() * 100 + 1);
-				addBST(tree, value);
-			}
-		});
-		buttonPanel.add(addRandButton);
-	}
-
-	public void addRandSettingForAVL(AVLTree tree) {
-		addRandButton.setBackground(Param.COLOR_BUTT_CREATE);
-		addRandButton.setFont(Param.BUTTON_FONT);
-		addRandButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int value = (int) (Math.random() * 100 + 1);
-				addAVL(tree, value);
-			}
-		});
-		buttonPanel.add(addRandButton);
-	}
-
-	public void addButtonSettingForBST(BSTTree tree) {
-		addButton.setBackground(Param.COLOR_BUTT_CREATE);
-		addButton.setFont(Param.BUTTON_FONT);
-		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int value;
 				try {
-					value = Integer.parseInt(valueField.getText());
-				} catch (NumberFormatException e) {
-					System.out.println("not a number");
-					logField.setText("'" + valueField.getText() + "' is not a number");
-					return;
+					treeAVL.addNode(value);
+					Node nodeAdded = treeAVL.searchNode(value);
+					if (nodeAdded != null) 
+						System.out.println(nodeAdded.getStatus());
+					treePanel.setNodePanel(treeAVL.getTree());
+					repaint();
+					logField.setText("node " + value + " added");
+					Node degNode = treeAVL.chekDeg(treeAVL.getTree());
+					repaint();
+					if (degNode != null && degNode.getStatus() == Node.degColor) {
+						logField.setText("node " + value + " added with ...");
+						enableComponents(buttonPanel, false);
+						new java.util.Timer().schedule(new java.util.TimerTask() {
+							@Override
+							public void run() {
+								degNode.setStatus(Node.nodeColor);
+								String rotateType = treeAVL.typeOfRotation(degNode);
+								treePanel.repaint();
+								enableComponents(buttonPanel, true);
+								logField.setText("node " + value + " added with " + rotateType);
+							}
+						}, 2000);
+					}
+				} catch (Exception avl) {
+					logField.setText(avl.getMessage());
 				}
-				if (value > 999 || value < -99) {
-					System.out.println("to many symbols");
-					logField.setText("proposed rage: from -99 to 999");
-					return;
-				}
-				addBST(tree, value);
 			}
 		});
-		buttonPanel.add(addButton);
-	}
-
-	public void addButtonSettingForAVL(AVLTree tree) {
-		addButton.setBackground(Param.COLOR_BUTT_CREATE);
-		addButton.setFont(Param.BUTTON_FONT);
-		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int value;
-				try {
-					value = Integer.parseInt(valueField.getText());
-				} catch (NumberFormatException e) {
-					System.out.println("not a number");
-					logField.setText("'" + valueField.getText() + "' is not a number");
-					return;
-				}
-				if (value > 999 || value < -99) {
-					System.out.println("to many symbols");
-					logField.setText("proposed rage: from -99 to 999");
-					return;
-				}
-				addAVL(tree, value);
-			}
-		});
-		buttonPanel.add(addButton);
 	}
 
 	public void removeButtonSettingForBST(BSTTree tree) {
@@ -249,7 +260,7 @@ public class GUI extends JFrame {
 					return;
 				}
 
-				Node forRemove = treeLogic.searchNode(value);
+				Node forRemove = treeBST.searchNode(value);
 				if (forRemove == null) {
 					logField.setText("node " + value + " is not exist");
 					return;
@@ -270,10 +281,9 @@ public class GUI extends JFrame {
 				}, 1000);
 			}
 		});
-		buttonPanel.add(removeButton);
 	}
 
-	public void removeButtonSettingForAVL(AVLTree tree) {
+	public void removeButtonSettingForAVL() {
 		removeButton.setBackground(Param.COLOR_BUTT_REMOVE);
 		removeButton.setFont(Param.BUTTON_FONT);
 		removeButton.addActionListener(new ActionListener() {
@@ -287,7 +297,7 @@ public class GUI extends JFrame {
 					return;
 				}
 
-				Node forRemove = treeLogic.searchNode(value);
+				Node forRemove = treeAVL.searchNode(value);
 				if (forRemove == null) {
 					logField.setText("node " + value + " is not exist");
 					return;
@@ -299,7 +309,7 @@ public class GUI extends JFrame {
 				new java.util.Timer().schedule(new java.util.TimerTask() {
 					@Override
 					public void run() {
-						tree.removeNode(forRemove);
+						treeAVL.removeNode(forRemove);
 						forRemove.setStatus(Node.addColor);
 						treePanel.repaint();
 						enableComponents(buttonPanel, true);
@@ -308,7 +318,6 @@ public class GUI extends JFrame {
 				}, 1000);
 			}
 		});
-		buttonPanel.add(removeButton);
 	}
 
 	private void searchButtonSetting() {
@@ -317,7 +326,6 @@ public class GUI extends JFrame {
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int value;
-
 				try {
 					value = Integer.parseInt(valueField.getText());
 				} catch (NumberFormatException e) {
@@ -325,8 +333,13 @@ public class GUI extends JFrame {
 					logField.setText("'" + valueField.getText() + "' is not a number");
 					return;
 				}
-
-				Node result = treeLogic.searchNode(value);
+				Node result;
+				if (comboboxTree.getSelectedIndex() == 0) {
+					result = treeAVL.searchNode(value);
+				}
+				else {
+					result = treeBST.searchNode(value);
+				}
 				if (result == null) {
 					logField.setText("node " + value + " is not exist");
 				} else {

@@ -1,37 +1,32 @@
 package tree.logic;
 
+import javax.swing.JOptionPane;
 import exception.ExceptionErrorAdd;
 
 public class AVLTree extends BSTTree{
-	private int degenerated;
 	
-	public void setDegenerated(int val) {
-		degenerated = val;
+	public AVLTree() {
+		super();
 	}
-	
-	public int getDegenerated() {
-		return degenerated;
-	}
-
-	public Node chekDeg (Node localNode){  
+	public Node chekDeg (Node localTree){
 		
-		int leftChildHeight = getLeftHeight(localNode);
-		int righChildtHeight = getRightHeight(localNode);
+		int leftChildHeight = getLeftHeight(localTree);
+		int righChildtHeight = getRightHeight(localTree);
+		
 		if (Math.abs(leftChildHeight - righChildtHeight) > 1){
-			return localNode;
-		} else if (localNode.getParent() != null) {
-			return chekDeg(localNode.getParent());
+			localTree.setStatus(Node.degColor);
+			return localTree;
+		} else if (localTree.getParent() != null) {
+			return chekDeg(localTree.getParent());
 		} else {
 			return null;
 		}
 	}
 
-
 	public String typeOfRotation(Node degTree) {
 		String rotate;
 		int leftChildHeight = getLeftHeight(degTree); // chieu cao con trai
 		int righChildtHeight = getRightHeight(degTree);	// chieu cao con phai
-
 		if (leftChildHeight > righChildtHeight) {
 			Node tmpLeftChild = degTree.getLeftChild();
 
@@ -58,6 +53,7 @@ public class AVLTree extends BSTTree{
 				rotate = "left rotate";
 			} else {
 				// double left rotation
+				JOptionPane.showMessageDialog(null, "Da vao day");
 				doubleLeftRotate(degTree);
 				rotate = "double left rotate";
 			}
@@ -182,6 +178,7 @@ public class AVLTree extends BSTTree{
 		}
 	}
 	
+	
 	private void doubleLeftRotate (Node degTree) {
 		Node rightChild = degTree.getRightChild(),
 			 parent = degTree.getParent(),
@@ -234,16 +231,24 @@ public class AVLTree extends BSTTree{
 			typeOfRotation(chekDeg(parent));
 		}
 	}
+	public Node addNode(int value) throws Exception {
+		this.setColorForTree();
+		if (tree == null) {
+			tree = new Node(value);
+			return tree;
+		} else {
+			try {
+				Node degNode = this.addNode(tree, value);
+				return degNode;
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+	}
 	
 	public Node addNode (Node localNode, int value) throws Exception{
 		try {
 			Node newNode = super.addNode(localNode, value);
-			if(newNode != null) {
-				Node checkDeg = chekDeg(newNode);
-				if(checkDeg != null) {
-					typeOfRotation(checkDeg);
-				}
-			}
 			return newNode;
 		} catch (Exception ErrorAdd) {
 			throw ErrorAdd;

@@ -1,67 +1,105 @@
 package tree.logic;
 
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
 import exception.ExceptionErrorAdd;
 
 public class BSTTree {
-	protected Node tree = null;
-
+	protected Node tree;
+	
+	public BSTTree() {
+		tree = null;
+	}
+	public BSTTree(int value) {
+		tree = new Node();
+		tree.setValue(value);
+	}
 	public Node getTree() {
 		return tree;
 	}
+	
+	public void setColorForTree() {
+		this.setColorForTree(tree);
+	}
+	public void setColorForTree(Node localNode) {
+		if (localNode == null) {
+			return;
+		}
+		else {
+			localNode.setStatus(Node.nodeColor);
+			setColorForTree(localNode.getLeftChild());
+			setColorForTree(localNode.getRightChild());
+		}
+	}
 
-	public void addNode(int value) throws Exception {
+	public Node addNode(int value) throws Exception {
+		this.setColorForTree();
+		Node node = new Node(value);
 		if (tree == null) {
-			tree = new Node(value);
+			tree = node;
+			return tree;
 		} else {
 			try {
-				addNode(tree, value);
+				node = addNode(tree, value);
+				return node;
 			} catch (Exception e) {
 				throw e;
 			}
 		}
 	}
 
-	public Node addNode(Node localNode, int value) throws Exception {
-
-		if (value < localNode.getValue()) {
-			if (localNode.getLeftChild() == null) {
-				Node newNode = new Node(value);
-				localNode.addLeftChild(newNode);
-				newNode.setParent(localNode);
-				newNode.setStatus(Node.addColor);
-				recalcHeight(newNode);
-				return newNode;
-			} else {
-				addNode(localNode.getLeftChild(), value);
-			}
-		} else if (value > localNode.getValue()) {
-			if (localNode.getRightChild() == null) {
-				Node newNode = new Node(value);
-				localNode.addRightChild(newNode);
-				newNode.setParent(localNode);
-				newNode.setStatus(Node.addColor);
-				recalcHeight(newNode);
-				return newNode;
-			} else {
-				addNode(localNode.getRightChild(), value);
-			}
-		} else {
-			throw new ExceptionErrorAdd("Can't add cause the value " + value + " is existed");
-		}
-		return null;
-	}
-
 	// cap nhat lai chieu cao cua Node hien tai
 	public void recalcHeight(Node localNode) {
-
+		if(localNode == null) {
+			return;
+		}
 		int leftChildHeight = getLeftHeight(localNode);
 		int righChildtHeight = getRightHeight(localNode);
 
 		localNode.setHeight(Math.max(leftChildHeight, righChildtHeight) + 1);
+		recalcHeight(localNode.getParent());
 	}
 
+	public Node addNode(Node localNode, int value) throws Exception {
+
+		Node newNode = new Node(value);
+		if (localNode == null) {
+			localNode = newNode;
+			return localNode;
+		} else {
+			if (value < localNode.getValue()) {
+				
+				if (localNode.getLeftChild() == null) {
+					localNode.addLeftChild(newNode);
+					newNode.setParent(localNode);
+//					JOptionPane.showMessageDialog(null, "da add node trai");
+					recalcHeight(newNode);
+					return newNode;
+				} else {
+//					JOptionPane.showMessageDialog(null, "sang trai");
+//					localNode.getLeftChild().setStatus(5);
+					addNode(localNode.getLeftChild(), value);
+				}
+			} else if (value > localNode.getValue()) {
+				
+				if (localNode.getRightChild() == null) {
+					localNode.addRightChild(newNode);
+					newNode.setParent(localNode);
+//					JOptionPane.showMessageDialog(null, "da add node phai");
+					recalcHeight(newNode);
+					return newNode;
+				} else {
+//					JOptionPane.showMessageDialog(null, "sang phai");
+					addNode(localNode.getRightChild(), value);
+				}
+			} else {
+				throw new ExceptionErrorAdd("Can't add cause the value " + value + " is existed");
+			}
+			return null;
+		}
+	}
+
+	
 	public int getLeftHeight(Node localNode) {
 		int leftChildHeight = localNode.getLeftChild() == null ? 0 : localNode.getLeftChild().getHeight();
 		return leftChildHeight;
@@ -75,23 +113,19 @@ public class BSTTree {
 	// search Node
 	public Node searchNode(int value) {
 		Node result = searchNode(tree, value);
-		;
 		if (result != null) {
-			result.setStatus(1);
-		} else {
-			result.setStatus(-1);
-		}
+			return result;
+		} 
 		return result;
 	}
 
 	public Node searchNode(Node localNode, int value) {
-		Node searchResult = new Node();
+		Node searchResult = null;
 
 		if (localNode == null) {
 			return null;
 		}
-
-		if (localNode.getValue() == value) {
+		else if (localNode.getValue() == value) {
 			searchResult = localNode;
 		} else {
 			if (value < localNode.getValue()) {

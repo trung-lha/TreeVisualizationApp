@@ -17,7 +17,9 @@ public class BSTTree {
 	public Node getTree() {
 		return tree;
 	}
-	
+	public void setTree(Node tree) {
+		this.tree = tree;
+	}
 	public void setColorForTree() {
 		this.setColorForTree(tree);
 	}
@@ -72,12 +74,9 @@ public class BSTTree {
 				if (localNode.getLeftChild() == null) {
 					localNode.addLeftChild(newNode);
 					newNode.setParent(localNode);
-//					JOptionPane.showMessageDialog(null, "da add node trai");
 					recalcHeight(newNode);
 					return newNode;
 				} else {
-//					JOptionPane.showMessageDialog(null, "sang trai");
-//					localNode.getLeftChild().setStatus(5);
 					addNode(localNode.getLeftChild(), value);
 				}
 			} else if (value > localNode.getValue()) {
@@ -85,11 +84,9 @@ public class BSTTree {
 				if (localNode.getRightChild() == null) {
 					localNode.addRightChild(newNode);
 					newNode.setParent(localNode);
-//					JOptionPane.showMessageDialog(null, "da add node phai");
 					recalcHeight(newNode);
 					return newNode;
 				} else {
-//					JOptionPane.showMessageDialog(null, "sang phai");
 					addNode(localNode.getRightChild(), value);
 				}
 			} else {
@@ -112,6 +109,7 @@ public class BSTTree {
 
 	// search Node
 	public Node searchNode(int value) {
+		this.setColorForTree();
 		Node result = searchNode(tree, value);
 		if (result != null) {
 			return result;

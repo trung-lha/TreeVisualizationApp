@@ -23,7 +23,7 @@ public class Param {
 	public static Color COLOR_LINE = Color.BLACK;
 	public static Color COLOR_VALUE = Color.BLACK;
 	public static Color COLOR_WARNING = Color.RED;
-	public static Color COLOR_SEARCH = Color.YELLOW;
+	public static Color COLOR_SEARCH = Color.RED;
 	
 	public static Font BUTTON_FONT = new Font("Tahoma", Font.PLAIN, 14);
 	public static Font NODE_FONT = new Font("Tahoma", Font.PLAIN, 14);

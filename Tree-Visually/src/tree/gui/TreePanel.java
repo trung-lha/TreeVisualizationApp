@@ -76,8 +76,8 @@ public class TreePanel extends JPanel{
 		if (root.getStatus() == Node.degColor) {
 			g2.setColor(Param.COLOR_DEG);
 		}
-		if (root.getStatus() == Node.warningColor) {
-			g2.setColor(Param.COLOR_WARNING);
+		if (root.getStatus() == Node.searchColor) {
+			g2.setColor(Param.COLOR_SEARCH);
 		}
 		g2.fillOval(root.getX(), root.getY(), Param.DIAMETR, Param.DIAMETR);
 		

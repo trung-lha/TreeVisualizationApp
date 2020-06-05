@@ -1,5 +1,7 @@
 package tree.logic;
 
+import java.util.TreeMap;
+
 import javax.swing.JOptionPane;
 import exception.ExceptionErrorAdd;
 
@@ -7,6 +9,36 @@ public class AVLTree extends BSTTree{
 	
 	public AVLTree() {
 		super();
+	}
+	public Node checkDeg() {
+		return checkDeg(tree);
+	}
+	public Node checkDeg(Node localNode){
+		if (localNode == null) {
+			return null;
+		}
+		else {
+//			JOptionPane.showMessageDialog(null, "vao check deg local != null");
+			int leftHeight, rightHeight;
+			if (localNode.getLeftChild() == null) {
+				leftHeight = 0;
+			} else {
+				leftHeight = localNode.getLeftChild().getHeight();
+			}
+			if (localNode.getRightChild() == null) {
+				rightHeight = 0;
+			} else {
+				rightHeight = localNode.getRightChild().getHeight();
+			}
+			if (Math.abs(leftHeight- rightHeight) > 1) {
+				localNode.setStatus(Node.degColor);
+				return localNode;
+			} else {
+				checkDeg(localNode.getLeftChild());
+				checkDeg(localNode.getRightChild());
+				return null;
+			}
+		}
 	}
 	public Node chekDeg (Node localTree){
 		
@@ -53,7 +85,7 @@ public class AVLTree extends BSTTree{
 				rotate = "left rotate";
 			} else {
 				// double left rotation
-				JOptionPane.showMessageDialog(null, "Da vao day");
+//				JOptionPane.showMessageDialog(null, "Da vao day");
 				doubleLeftRotate(degTree);
 				rotate = "double left rotate";
 			}
@@ -221,31 +253,14 @@ public class AVLTree extends BSTTree{
 			tree = leftGrandson;
 		}
 	}
-	
-	public void removeNode(Node forRemove) {
-		Node parent = forRemove.getParent();
-		super.removeNode(forRemove);
-		Node check = chekDeg(parent);
-		if(check != null) {
-			check.setStatus(Node.degColor);
-			typeOfRotation(chekDeg(parent));
-		}
+	public Node searchNode(int value) {
+//		this.setColorForTree();
+		Node result = searchNode(tree, value);
+		if (result != null) {
+			return result;
+		} 
+		return result;
 	}
-	public Node addNode(int value) throws Exception {
-		this.setColorForTree();
-		if (tree == null) {
-			tree = new Node(value);
-			return tree;
-		} else {
-			try {
-				Node degNode = this.addNode(tree, value);
-				return degNode;
-			} catch (Exception e) {
-				throw e;
-			}
-		}
-	}
-	
 	public Node addNode (Node localNode, int value) throws Exception{
 		try {
 			Node newNode = super.addNode(localNode, value);

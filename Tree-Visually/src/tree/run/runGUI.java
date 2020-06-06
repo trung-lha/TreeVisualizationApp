@@ -1,18 +1,15 @@
-package avl.tree.main;
+package tree.run;
 
 import javax.swing.SwingUtilities;
+import tree.gui.GUI;
 
-import avl.tree.gui.UI;
-
-public class Start {
+public class runGUI {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new UI();
+				new GUI();
 			}
 		});
 	}
-
-
 }

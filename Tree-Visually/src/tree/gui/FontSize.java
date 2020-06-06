@@ -1,4 +1,4 @@
-package avl.tree.gui;
+package tree.gui;
 
 public class FontSize {
 	private int width;

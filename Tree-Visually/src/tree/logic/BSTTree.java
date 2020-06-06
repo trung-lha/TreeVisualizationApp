@@ -139,6 +139,38 @@ public class BSTTree {
 		tree = null;
 	}
 
+	public boolean checkLeaf(Node localNode) {
+		if (localNode.getRightChild() == null & localNode.getLeftChild() == null) {
+			return true;
+		}
+		else return false;
+	}
+	
+	public Node findReplaceNodeForRemove(Node forRemove) {
+
+		Node leftChild = forRemove.getLeftChild();
+		Node rightChild = forRemove.getRightChild();
+		Node higherChild = getLeftHeight(forRemove) > getRightHeight(forRemove) ? leftChild : rightChild;
+		if (higherChild == null ){
+			return null;
+		}
+		Node forReplace = higherChild;
+		if (higherChild.getValue() > forRemove.getValue()) {
+			while (forReplace.getLeftChild() != null) {
+				forReplace = forReplace.getLeftChild();
+			}
+			forReplace.setStatus(Node.replaceColor);
+			return forReplace;
+		} else {
+			while (forReplace.getRightChild() != null) {
+				forReplace = forReplace.getRightChild();
+			}
+			forReplace.setStatus(Node.replaceColor);
+			return forReplace;
+		}
+		
+	}
+	
 	public void removeNode(Node forRemove) {
 		Node parent = forRemove.getParent(); // cha cua node can xoa
 		Node leftChild = forRemove.getLeftChild();

@@ -17,7 +17,7 @@ public class Node {
 	public static final int addColor = 1;
 	public static final int removeColor = 2;
 	public static final int degColor = 3;
-	public static final int warningColor = 4;
+	public static final int replaceColor = 4;
 	public static final int searchColor = 5;
 	public static final int nodeColor = 6;
 	

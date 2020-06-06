@@ -15,7 +15,7 @@ public class TreePanel extends JPanel implements ActionListener{
 	private Graphics2D g2;
 	private Node root;
 	private int done;
-	Timer tm = new Timer(20, this);
+	Timer tm = new Timer(25, this);
 
 	public void setNodePanel(Node node) {
 		this.root = node;
@@ -129,6 +129,9 @@ public class TreePanel extends JPanel implements ActionListener{
 		}
 		if (root.getStatus() == Node.searchColor) {
 			g2.setColor(new Color(98,204,77));
+		}
+		if (root.getStatus() == Node.replaceColor) {
+			g2.setColor(Color.PINK);
 		}
 		g2.fillOval((int)root.getX(),(int) root.getY(), 36, 36);
 

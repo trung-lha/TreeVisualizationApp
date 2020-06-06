@@ -11,35 +11,46 @@ public class AVLTree extends BSTTree{
 		super();
 	}
 	public Node checkDeg() {
-		return checkDeg(tree);
+		return this.searchNodeDeg(tree);
 	}
-	public Node checkDeg(Node localNode){
-		if (localNode == null) {
+	public Node searchNodeDeg(Node localNode) {
+		Node result = null;
+		if (localNode == null)
 			return null;
-		}
+		if (localNode.getStatus() == Node.degColor)
+			result = localNode;
 		else {
-//			JOptionPane.showMessageDialog(null, "vao check deg local != null");
-			int leftHeight, rightHeight;
-			if (localNode.getLeftChild() == null) {
-				leftHeight = 0;
-			} else {
-				leftHeight = localNode.getLeftChild().getHeight();
-			}
-			if (localNode.getRightChild() == null) {
-				rightHeight = 0;
-			} else {
-				rightHeight = localNode.getRightChild().getHeight();
-			}
-			if (Math.abs(leftHeight- rightHeight) > 1) {
-				localNode.setStatus(Node.degColor);
-				return localNode;
-			} else {
-				checkDeg(localNode.getLeftChild());
-				checkDeg(localNode.getRightChild());
-				return null;
-			}
+			result = searchNodeDeg(localNode.getRightChild());
+			result = searchNodeDeg(localNode.getLeftChild());
 		}
+		return result;
 	}
+	public void checkDegAndBookMark(Node localNode) {
+		if (localNode == null) {
+			return;
+		}
+		int leftHeight, rightHeight;
+		if (localNode.getLeftChild() == null) {
+			leftHeight = 0;
+		} else {
+			leftHeight = localNode.getLeftChild().getHeight();
+		}
+		if (localNode.getRightChild() == null) {
+			rightHeight = 0;
+		} else {
+			rightHeight = localNode.getRightChild().getHeight();
+		}
+//		JOptionPane.showMessageDialog(null, localNode.getValue()+" "+leftHeight+" "+rightHeight);
+		if (Math.abs(leftHeight - rightHeight) > 1) {
+//			JOptionPane.showMessageDialog(null, " tim duoc vi tri mcb");
+			localNode.setStatus(Node.degColor);
+			return;
+		}
+		checkDegAndBookMark(localNode.getRightChild());
+		checkDegAndBookMark(localNode.getLeftChild());
+//		JOptionPane.showMessageDialog(null, "da duyet xong cay");
+	}
+
 	public Node chekDeg (Node localTree){
 		
 		int leftChildHeight = getLeftHeight(localTree);

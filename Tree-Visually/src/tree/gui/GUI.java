@@ -250,7 +250,6 @@ public class GUI extends JFrame {
 							new java.util.Timer().schedule(new java.util.TimerTask() {
 								@Override
 								public void run() {
-									
 									degNode.setStatus(Node.nodeColor);
 									String rotateType = treeAVL.typeOfRotation(degNode);
 									treePanel.setNodePanel(treeAVL.getTree());
@@ -278,7 +277,7 @@ public class GUI extends JFrame {
 				try {
 					value = Integer.parseInt(valueField.getText());
 				} catch (NumberFormatException e) {
-					System.out.println("not a number");
+					logField.setText(valueField.getText() + " is not number.");
 					return;
 				}
 				// ******************************** Remove for BST ******************************************
@@ -291,21 +290,32 @@ public class GUI extends JFrame {
 					forRemove.setStatus(Node.removeColor);
 					treePanel.setNodePanel(treeBST.getTree());
 					repaint();
+					logField.setText("Find a replace node for remove ...");
+					new java.util.Timer().schedule(new java.util.TimerTask() {
+						@Override
+						public void run() {
+							treeBST.findReplaceNodeForRemove(forRemove);
+							repaint();
+							logField.setText("Assign replaceNode's value to Remove's value ");
+						}
+					}, 2000);
 					enableComponents(buttonPanel, false);
 					new java.util.Timer().schedule(new java.util.TimerTask() {
 						@Override
 						public void run() {
-							forRemove.setStatus(Node.nodeColor);
+							treeBST.setColorForTree();
 							treeBST.removeNode(forRemove);
 							treePanel.setNodePanel(treeBST.getTree());;
 							treePanel.startAction();
 							enableComponents(buttonPanel, true);
 							logField.setText("node " + value + " removed");
 						}
-					}, 1000);
+					}, 5000);
 				}
 				// ******************************** Remove for AVL ******************************************
 				else {
+					treeAVL.setColorForTree();
+					findRoot();
 					Node forRemove = treeAVL.searchNode(value);
 					
 					if (forRemove == null) {
@@ -318,25 +328,25 @@ public class GUI extends JFrame {
 						@Override
 						public void run() {
 							treeAVL.removeNode(forRemove);
-							treeAVL.setColorForTree();
-							findRoot();
+							treePanel.setLocation();
 							treePanel.setNodePanel(treeAVL.getTree());
 							repaint();
-							Node degNode = treeAVL.checkDeg(treeAVL.getTree());
-							if (degNode != null)
-								repaint();
+							treeAVL.checkDegAndBookMark(treeAVL.getTree());
+							Node degNode = treeAVL.checkDeg();
+							repaint();
 							if (degNode != null) {
-								logField.setText("node " + value + " added with ...");
+								logField.setText("Find an unbalance node");
 								enableComponents(buttonPanel, false);
 								new java.util.Timer().schedule(new java.util.TimerTask() {
 									@Override
 									public void run() {
+										logField.setText("Rotating tree ...");
 										degNode.setStatus(Node.nodeColor);
-										String rotateType = treeAVL.typeOfRotation(degNode);
+										treeAVL.typeOfRotation(degNode);
+										findRoot();
 										treePanel.setNodePanel(treeAVL.getTree());
 										treePanel.startAction();
 										enableComponents(buttonPanel, true);
-										logField.setText("node " + value + " added with " + rotateType);
 									}
 								}, 2000);
 							}

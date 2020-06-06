@@ -8,8 +8,12 @@ public class Node {
 
 	private int value;
 	private int height;
-	private int x;
-	private int y;
+	private float x;
+	private float y;
+	private float moveX;
+	private float moveY;
+	private float newX;
+	private float newY;
 	public static final int addColor = 1;
 	public static final int removeColor = 2;
 	public static final int degColor = 3;
@@ -54,19 +58,44 @@ public class Node {
 		return height;
 	}
 	
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 	
-	public int getX() {
+	public float getX() {
 		return x;
 	}
+	public float getNewX() {
+		return newX;
+	}
+	public void setNewX(float newX) {
+		this.newX = newX;
+	}
+	public float getNewY() {
+		return newY;
+	}
+	public void setNewY(float newY) {
+		this.newY = newY;
+	}
+	public void setMoveX(float x) {
+		this.moveX = x;
+	}
 	
-	public void setY(int y) {
+	public float getMoveX() {
+		return moveX;
+	}
+	public void setMoveY(float y) {
+		this.moveY = y;
+	}
+	
+	public float getMoveY() {
+		return moveY;
+	}
+	public void setY(float y) {
 		this.y = y;
 	}
 	
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 

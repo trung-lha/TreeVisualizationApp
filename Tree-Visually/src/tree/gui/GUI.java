@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,12 +44,12 @@ public class GUI extends JFrame {
 
 	public GUI() {
 		setTitle("BST Tree,AVL Tree visualization Application");
-		setSize(Param.WIDTH + 50, Param.HEIGHT);
+		setSize(1250, 800);
 		setResizable(true);
 		treePanel = new TreePanel();
 		logPanel = new JPanel();
 		logField = new JLabel("Please add a number");
-		logField.setFont(Param.BUTTON_FONT);
+		logField.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		logPanel.add(logField);
 
 		// setup button for button Panel
@@ -56,7 +57,7 @@ public class GUI extends JFrame {
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		valueField = new JTextField("");
 		valueField.setColumns(7);
-		valueField.setFont(Param.TEXT_FIELD_FONT);
+		valueField.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		valueField.setHorizontalAlignment(JTextField.CENTER);
 		buttonPanel.add(valueField);
 		// ****************** ADD Setting ************************
@@ -80,10 +81,10 @@ public class GUI extends JFrame {
 		clearButtonSetting();
 		
 		// ************ Select option box setting *****************
-		comboboxTree.setBackground(Param.COLOR_BUTT_CREATE);
-		comboboxTree.setFont(Param.BUTTON_FONT);
+		comboboxTree.setBackground(new Color(33,184,191));
+		comboboxTree.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		buttonPanel.add(comboboxTree);
-		buttonPanel.setBackground(Param.COLOR_PANEL);
+		buttonPanel.setBackground(new Color(226,245,251));
 		treePanel.setBackground(Color.WHITE);
 
 		getContentPane().add(buttonPanel, BorderLayout.NORTH);
@@ -96,8 +97,8 @@ public class GUI extends JFrame {
 
 	}
 	private void addButtonSetting() {
-		addButton.setBackground(Param.COLOR_BUTT_CREATE);
-		addButton.setFont(Param.BUTTON_FONT);
+		addButton.setBackground(new Color(33,184,191));
+		addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -187,8 +188,8 @@ public class GUI extends JFrame {
 	}
 
 	private void clearButtonSetting() {
-		clearButton.setBackground(Param.COLOR_BUTT_CLEAR);
-		clearButton.setFont(Param.BUTTON_FONT);
+		clearButton.setBackground(new Color(242,96,39));
+		clearButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				treeAVL.clearTree();
@@ -203,8 +204,8 @@ public class GUI extends JFrame {
 
 
 	public void addRandSetting() {
-		addRandButton.setBackground(Param.COLOR_BUTT_CREATE);
-		addRandButton.setFont(Param.BUTTON_FONT);
+		addRandButton.setBackground(new Color(33,184,191));
+		addRandButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		addRandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int value = (int) (Math.random() * 100 + 1);
@@ -268,8 +269,8 @@ public class GUI extends JFrame {
 	}
 
 	public void removeButtonSetting() {
-		removeButton.setBackground(Param.COLOR_BUTT_REMOVE);
-		removeButton.setFont(Param.BUTTON_FONT);
+		removeButton.setBackground(new Color(239,219,0));
+		removeButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		removeButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -351,8 +352,8 @@ public class GUI extends JFrame {
 	}
 
 	private void searchButtonSetting() {
-		searchButton.setBackground(Param.COLOR_BUTT_CREATE);
-		searchButton.setFont(Param.BUTTON_FONT);
+		searchButton.setBackground(new Color(33,184,191));
+		searchButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int value;

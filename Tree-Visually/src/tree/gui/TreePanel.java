@@ -41,25 +41,25 @@ public class TreePanel extends JPanel implements ActionListener{
 		}
 		Node parent = localNode.getParent();
 		if (parent == null) {
-			localNode.setX(Param.WIDTH / 2);
-			localNode.setY(Param.TOP_MARGIN);
+			localNode.setX(1200 / 2);
+			localNode.setY(10);
 		} else {
 			if (parent.getParent() == null) {
 				if (localNode.getValue() < parent.getValue()) {
-					localNode.setX(Param.WIDTH / 4);
-					localNode.setY(Param.NODE_MARGIN + parent.getY());
+					localNode.setX(1200/ 4);
+					localNode.setY(70 + parent.getY());
 				} else {
-					localNode.setX(Param.WIDTH - Param.WIDTH / 4);
-					localNode.setY(Param.NODE_MARGIN + parent.getY());
+					localNode.setX(1200 - 1200 / 4);
+					localNode.setY(70 + parent.getY());
 				}
 			} else {
 
 				if (localNode.getValue() < parent.getValue()) {
 					localNode.setX(parent.getX() - Math.abs(parent.getX() - parent.getParent().getX()) / 2);
-					localNode.setY(Param.NODE_MARGIN + parent.getY());
+					localNode.setY(70 + parent.getY());
 				} else {
 					localNode.setX(parent.getX() + Math.abs(parent.getX() - parent.getParent().getX()) / 2);
-					localNode.setY(Param.NODE_MARGIN + parent.getY());
+					localNode.setY(70 + parent.getY());
 				}
 			}
 		}
@@ -79,21 +79,21 @@ public class TreePanel extends JPanel implements ActionListener{
 		}
 		Node parent = localNode.getParent();
 		if (parent == null) {
-			setMove(localNode, Param.WIDTH / 2, Param.TOP_MARGIN);
+			setMove(localNode, 1200 / 2, 10);
 		} else {
 			if (parent.getParent() == null) {
 				if (localNode.getValue() < parent.getValue()) {
-					setMove(localNode, Param.WIDTH / 4, Param.NODE_MARGIN + parent.getNewY());
+					setMove(localNode, 1200 / 4, 70 + parent.getNewY());
 				} else {
-					setMove(localNode, Param.WIDTH - Param.WIDTH / 4, Param.NODE_MARGIN + parent.getNewY());
+					setMove(localNode, 1200 - 1200 / 4, 70 + parent.getNewY());
 				}
 			} else {
 				if (localNode.getValue() < parent.getValue()) {
 					setMove(localNode, parent.getNewX() - Math.abs(parent.getNewX() - parent.getParent().getNewX()) / 2,
-							parent.getNewY() + Param.NODE_MARGIN);
+							parent.getNewY() + 70);
 				} else {
 					setMove(localNode, parent.getNewX() + Math.abs(parent.getNewX() - parent.getParent().getNewX()) / 2,
-							parent.getNewY() + Param.NODE_MARGIN);
+							parent.getNewY() + 70);
 				}
 			}
 		}
@@ -110,34 +110,34 @@ public class TreePanel extends JPanel implements ActionListener{
 		Node parent = root.getParent();
 		// draw Line for Node
 		if (parent != null) {
-			g2.setColor(Param.COLOR_LINE);
-			g2.drawLine((int) parent.getX() + Param.DIAMETR / 2, (int) parent.getY() + Param.DIAMETR - 1,
+			g2.setColor(Color.BLACK);
+			g2.drawLine((int) parent.getX() + 36 / 2, (int) parent.getY() + 36 - 1,
 					(int) root.getX() + 17, (int) root.getY() + 17);
 		}
 		// set color for Node
 		if (root.getStatus() == Node.nodeColor) {
-			g2.setColor(Param.COLOR_NODE);
+			g2.setColor(new Color(33,184,191));
 		}
 		if (root.getStatus() == Node.addColor) {
-			g2.setColor(Param.COLOR_ADDED);
+			g2.setColor(Color.ORANGE);
 		}
 		if (root.getStatus() == Node.removeColor) {
-			g2.setColor(Param.COLOR_REMOVED);
+			g2.setColor(new Color(239,219,0));
 		}
 		if (root.getStatus() == Node.degColor) {
-			g2.setColor(Param.COLOR_DEG);
+			g2.setColor(Color.RED);
 		}
 		if (root.getStatus() == Node.searchColor) {
-			g2.setColor(Param.COLOR_SEARCH);
+			g2.setColor(new Color(98,204,77));
 		}
-		g2.fillOval((int)root.getX(),(int) root.getY(), Param.DIAMETR, Param.DIAMETR);
+		g2.fillOval((int)root.getX(),(int) root.getY(), 36, 36);
 
-		g2.setColor(Param.COLOR_VALUE);
+		g2.setColor(Color.BLACK);
 		if (root.getStatus() == 1) {
 			g2.setColor(Color.WHITE);
 		}
 		String nodeString = root.getValue() + "";
-		g2.drawString(nodeString, root.getX() + (Param.DIAMETR-13) / 2, root.getY() + 22);
+		g2.drawString(nodeString, root.getX() + (36-13) / 2, root.getY() + 22);
 
 		drawTree(root.getLeftChild());
 		drawTree(root.getRightChild());

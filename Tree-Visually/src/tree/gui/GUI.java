@@ -79,10 +79,7 @@ public class GUI extends JFrame {
 		clearButton = new JButton("Remove tree");
 		clearButtonSetting();
 		
-		
-		
-		
-
+		// ************ Select option box setting *****************
 		comboboxTree.setBackground(Param.COLOR_BUTT_CREATE);
 		comboboxTree.setFont(Param.BUTTON_FONT);
 		buttonPanel.add(comboboxTree);
@@ -120,7 +117,9 @@ public class GUI extends JFrame {
 					try {
 						treeBST.addNode(value);
 						treePanel.setNodePanel(treeBST.getTree());
-						treePanel.repaint();
+						treePanel.setLocation();
+						treePanel.setNodePanel(treeBST.getTree());
+						treePanel.startAction();
 						logField.setText("node " + value + " added");
 						enableComponents(buttonPanel, true);
 					} catch (Exception addBST) {
@@ -142,11 +141,14 @@ public class GUI extends JFrame {
 					try {
 						treeAVL.addNode(value);
 						treePanel.setNodePanel(treeAVL.getTree());
-						repaint();
+						treePanel.setLocation();
+						treePanel.setNodePanel(treeAVL.getTree());
+						treePanel.startAction();
 						logField.setText("node " + value + " added");
 						Node nodeAdded = treeAVL.searchNode(value);
 						Node degNode = treeAVL.chekDeg(nodeAdded);
-						repaint();
+						if (degNode != null)
+							repaint();
 						if (degNode != null) {
 							logField.setText("node " + value + " added with ...");
 							enableComponents(buttonPanel, false);
@@ -156,7 +158,7 @@ public class GUI extends JFrame {
 									degNode.setStatus(Node.nodeColor);
 									String rotateType = treeAVL.typeOfRotation(degNode);
 									treePanel.setNodePanel(treeAVL.getTree());
-									repaint();
+									treePanel.startAction();
 									enableComponents(buttonPanel, true);
 									logField.setText("node " + value + " added with " + rotateType);
 								}
@@ -206,7 +208,9 @@ public class GUI extends JFrame {
 		addRandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int value = (int) (Math.random() * 100 + 1);
+				
 				// *************** Add rand with BST *************************
+				
 				if (comboboxTree.getSelectedItem() == "BST Tree") {
 					
 					treePanel.setNodePanel(treeBST.getTree());
@@ -214,7 +218,9 @@ public class GUI extends JFrame {
 					try {
 						treeBST.addNode(value);
 						treePanel.setNodePanel(treeBST.getTree());
-						treePanel.repaint();
+						treePanel.setLocation();
+						treePanel.setNodePanel(treeBST.getTree());
+						treePanel.startAction();
 						logField.setText("node " + value + " added");
 						enableComponents(buttonPanel, true);
 					} catch (Exception addBST) {
@@ -228,9 +234,11 @@ public class GUI extends JFrame {
 					try {
 						treeAVL.addNode(value);
 						treePanel.setNodePanel(treeAVL.getTree());
-						repaint();
+						treePanel.setLocation();
+						treePanel.setNodePanel(treeAVL.getTree());
+						treePanel.startAction();
 						logField.setText("node " + value + " added");
-//						JOptionPane.showMessageDialog(null, "da add xong" + nodeAdded.getValue());
+						
 						Node nodeAdded = treeAVL.searchNode(value);
 						Node degNode = treeAVL.chekDeg(nodeAdded);
 						if (degNode != null)
@@ -241,10 +249,11 @@ public class GUI extends JFrame {
 							new java.util.Timer().schedule(new java.util.TimerTask() {
 								@Override
 								public void run() {
+									
 									degNode.setStatus(Node.nodeColor);
 									String rotateType = treeAVL.typeOfRotation(degNode);
 									treePanel.setNodePanel(treeAVL.getTree());
-									repaint();
+									treePanel.startAction();
 									enableComponents(buttonPanel, true);
 									logField.setText("node " + value + " added with " + rotateType);
 								}
@@ -271,10 +280,12 @@ public class GUI extends JFrame {
 					System.out.println("not a number");
 					return;
 				}
+				// ******************************** Remove for BST ******************************************
 				if (comboboxTree.getSelectedItem() == "BST Tree") {
 					Node forRemove = treeBST.searchNode(value);
 					if(forRemove == null) {
 						logField.setText("node " + value + " is not exist");
+						return;
 					}
 					forRemove.setStatus(Node.removeColor);
 					treePanel.setNodePanel(treeBST.getTree());
@@ -286,12 +297,13 @@ public class GUI extends JFrame {
 							forRemove.setStatus(Node.nodeColor);
 							treeBST.removeNode(forRemove);
 							treePanel.setNodePanel(treeBST.getTree());;
-							repaint();
+							treePanel.startAction();
 							enableComponents(buttonPanel, true);
 							logField.setText("node " + value + " removed");
 						}
 					}, 1000);
 				}
+				// ******************************** Remove for AVL ******************************************
 				else {
 					Node forRemove = treeAVL.searchNode(value);
 					
@@ -304,7 +316,6 @@ public class GUI extends JFrame {
 					new java.util.Timer().schedule(new java.util.TimerTask() {
 						@Override
 						public void run() {
-//							JOptionPane.showMessageDialog(null, "vao remove");
 							treeAVL.removeNode(forRemove);
 							treeAVL.setColorForTree();
 							findRoot();
@@ -314,7 +325,6 @@ public class GUI extends JFrame {
 							if (degNode != null)
 								repaint();
 							if (degNode != null) {
-//								JOptionPane.showMessageDialog(null, "vao xoay cay");
 								logField.setText("node " + value + " added with ...");
 								enableComponents(buttonPanel, false);
 								new java.util.Timer().schedule(new java.util.TimerTask() {
@@ -323,7 +333,7 @@ public class GUI extends JFrame {
 										degNode.setStatus(Node.nodeColor);
 										String rotateType = treeAVL.typeOfRotation(degNode);
 										treePanel.setNodePanel(treeAVL.getTree());
-										repaint();
+										treePanel.startAction();
 										enableComponents(buttonPanel, true);
 										logField.setText("node " + value + " added with " + rotateType);
 									}

@@ -1,7 +1,5 @@
 package tree.logic;
 
-import javax.swing.JOptionPane;
-
 import exception.ExceptionErrorAdd;
 
 public class BSTTree {

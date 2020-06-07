@@ -1,9 +1,6 @@
 package tree.logic;
 
-import java.util.TreeMap;
-
 import javax.swing.JOptionPane;
-import exception.ExceptionErrorAdd;
 
 public class AVLTree extends BSTTree{
 	
@@ -11,17 +8,26 @@ public class AVLTree extends BSTTree{
 		super();
 	}
 	public Node checkDeg() {
-		return this.searchNodeDeg(tree);
+		Node deg = null;
+		checkDegAndBookMark(tree);
+		deg =  this.searchNodeDeg(tree);
+//		if (deg != null)
+//			JOptionPane.showMessageDialog(null, "gt node mcb"+ deg.getValue());
+		return deg;
 	}
 	public Node searchNodeDeg(Node localNode) {
-		Node result = null;
 		if (localNode == null)
 			return null;
-		if (localNode.getStatus() == Node.degColor)
-			result = localNode;
-		else {
-			result = searchNodeDeg(localNode.getRightChild());
+		Node result = null;
+		if (localNode.getStatus() == Node.degColor) {
+//			JOptionPane.showMessageDialog(null, "Da tim duoc va tra ve");
+			return result = localNode;
+		} else {
+//			JOptionPane.showMessageDialog(null, "timt tiep");
 			result = searchNodeDeg(localNode.getLeftChild());
+			if (result != null)
+				return result;
+			result = searchNodeDeg(localNode.getRightChild());
 		}
 		return result;
 	}

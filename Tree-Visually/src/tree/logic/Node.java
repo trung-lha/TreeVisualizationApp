@@ -1,9 +1,5 @@
 package tree.logic;
 
-import javax.swing.JPanel;
-
-import com.sun.javafx.scene.NodeHelper.NodeAccessor;
-
 public class Node {
 
 	private int value;

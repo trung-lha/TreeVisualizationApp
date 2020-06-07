@@ -49,7 +49,7 @@ public class GUI extends JFrame {
 		treePanel = new TreePanel();
 		logPanel = new JPanel();
 		logField = new JLabel("Please add a number");
-		logField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		logField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		logPanel.add(logField);
 
 		// setup button for button Panel
@@ -91,11 +91,14 @@ public class GUI extends JFrame {
 		getContentPane().add(treePanel, BorderLayout.CENTER);
 		getContentPane().add(logPanel, BorderLayout.SOUTH);
 
-			
-		
 		setVisible(true);
 
 	}
+	
+	
+
+// ********************************************** Setting for AddButton ********************************************
+	
 	private void addButtonSetting() {
 		addButton.setBackground(new Color(33,184,191));
 		addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -174,18 +177,7 @@ public class GUI extends JFrame {
 		
 	}
 
-	public void paint(Graphics g) {
-		// call superclass version of method paint
-		super.paint(g);
-	}
-
-	private void enableComponents(Container container, boolean enable) {
-		Component[] components = container.getComponents();
-
-		for (Component component : components) {
-			component.setEnabled(enable);
-		}
-	}
+// ********************************************* Setting for clearButton ************************************	
 
 	private void clearButtonSetting() {
 		clearButton.setBackground(new Color(242,96,39));
@@ -202,7 +194,8 @@ public class GUI extends JFrame {
 		buttonPanel.add(clearButton);
 	}
 
-
+// ********************************************* Setting for AddRand Button  ************************************
+	
 	public void addRandSetting() {
 		addRandButton.setBackground(new Color(33,184,191));
 		addRandButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -267,6 +260,8 @@ public class GUI extends JFrame {
 		});
 	}
 
+// ********************************************* Setting for Remove Button  **********************************
+	
 	public void removeButtonSetting() {
 		removeButton.setBackground(new Color(239,219,0));
 		removeButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -317,13 +312,21 @@ public class GUI extends JFrame {
 					treeAVL.setColorForTree();
 					findRoot();
 					Node forRemove = treeAVL.searchNode(value);
-					
 					if (forRemove == null) {
 						logField.setText("node " + value + " is not exist");
 						return;
 					}
 					forRemove.setStatus(Node.removeColor);
 					treePanel.repaint();
+					logField.setText("Find a replace node for remove ...");
+					new java.util.Timer().schedule(new java.util.TimerTask() {
+						@Override
+						public void run() {
+							treeAVL.findReplaceNodeForRemove(forRemove);
+							repaint();
+							logField.setText("Assign replaceNode's value to Remove's value ");
+						}
+					}, 2000);
 					new java.util.Timer().schedule(new java.util.TimerTask() {
 						@Override
 						public void run() {
@@ -331,11 +334,11 @@ public class GUI extends JFrame {
 							treePanel.setLocation();
 							treePanel.setNodePanel(treeAVL.getTree());
 							repaint();
-							treeAVL.checkDegAndBookMark(treeAVL.getTree());
+							logField.setText("Find an unbalance node");
 							Node degNode = treeAVL.checkDeg();
 							repaint();
 							if (degNode != null) {
-								logField.setText("Find an unbalance node");
+								treeAVL.setColorForTree();
 								enableComponents(buttonPanel, false);
 								new java.util.Timer().schedule(new java.util.TimerTask() {
 									@Override
@@ -347,20 +350,26 @@ public class GUI extends JFrame {
 										treePanel.setNodePanel(treeAVL.getTree());
 										treePanel.startAction();
 										enableComponents(buttonPanel, true);
+										logField.setText("Tree is rotated.");
 									}
 								}, 2000);
 							}
 							enableComponents(buttonPanel, true);
-							logField.setText("node " + value + " removed");
+							if (degNode == null)
+								logField.setText("Not found unbalanced node.");
+							else {
+								logField.setText("Found an unbalanced node.");
+							}
 						}
-					}, 2000);
-					
-					
+					}, 5000);
+					logField.setText("node " + value + " removed");
 				}
 			}
 		});
 	}
 
+// ********************************************* Setting for Search Button  **************************************
+	
 	private void searchButtonSetting() {
 		searchButton.setBackground(new Color(33,184,191));
 		searchButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -402,6 +411,10 @@ public class GUI extends JFrame {
 		});
 		buttonPanel.add(searchButton);
 	}
+//	*********************************** Highlight Path *************************************************
+	public void highLightPath() {
+		
+	}
 	public void findRoot() {
 		if (treeAVL.getTree() != null) {
 			Node root = treeAVL.getTree();
@@ -416,6 +429,18 @@ public class GUI extends JFrame {
 				root = root.getParent();
 			}
 			treeBST.setTree(root);
+		}
+	}
+	public void paint(Graphics g) {
+		// call superclass version of method paint
+		super.paint(g);
+	}
+
+	private void enableComponents(Container container, boolean enable) {
+		Component[] components = container.getComponents();
+
+		for (Component component : components) {
+			component.setEnabled(enable);
 		}
 	}
 }

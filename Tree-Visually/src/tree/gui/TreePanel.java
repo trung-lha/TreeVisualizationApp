@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
 import tree.logic.Node;
 
 public class TreePanel extends JPanel implements ActionListener{

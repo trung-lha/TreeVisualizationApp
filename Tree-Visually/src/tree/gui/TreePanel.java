@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -16,7 +18,26 @@ public class TreePanel extends JPanel implements ActionListener{
 	private Graphics2D g2;
 	private Node root;
 	private int done;
+	public List<Node> checkedNode =new ArrayList();
 	Timer tm = new Timer(25, this);
+	
+	public List<Node> findPath(Node root,int value){
+		List<Node> checkedNode =new ArrayList();
+		findPath(root,value,checkedNode);
+		return checkedNode;
+	}
+	
+	public void findPath(Node root,int value,List<Node> checkedNode) {
+		if(root.getValue()==value) {
+			return ;
+		}else if(root.getValue()>value) {
+			checkedNode.add(new Node(root.getValue()));
+			findPath(root.getLeftChild(),value,checkedNode);
+		}else {
+			checkedNode.add(new Node(root.getValue()));
+			findPath(root.getRightChild(),value,checkedNode);
+		}
+	}
 
 	public void setNodePanel(Node node) {
 		this.root = node;

@@ -211,6 +211,14 @@ public class GUI extends JFrame {
 					enableComponents(buttonPanel, false);
 					try {
 						treeBST.addNode(value);
+						
+						//FindPath
+						treePanel.checkedNode=treePanel.findPath(treeBST.getTree(), value);
+						for(Node i:treePanel.checkedNode) {
+							System.out.println(i.getValue());
+						}
+						System.out.println("=================");
+						
 						treePanel.setNodePanel(treeBST.getTree());
 						treePanel.setLocation();
 						treePanel.setNodePanel(treeBST.getTree());
@@ -227,6 +235,12 @@ public class GUI extends JFrame {
 					treePanel.setNodePanel(treeAVL.getTree());
 					try {
 						treeAVL.addNode(value);
+						//FindPath
+						treePanel.checkedNode=treePanel.findPath(treeAVL.getTree(), value);
+						for(Node i:treePanel.checkedNode) {
+							System.out.println(i.getValue());
+						}
+						System.out.println("=================");
 						treePanel.setNodePanel(treeAVL.getTree());
 						treePanel.setLocation();
 						treePanel.setNodePanel(treeAVL.getTree());

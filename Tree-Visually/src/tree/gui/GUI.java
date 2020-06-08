@@ -117,15 +117,57 @@ public class GUI extends JFrame {
 						logField.setText("'" + valueField.getText() + "' is not a number");
 						return;
 					}
-					enableComponents(buttonPanel, false);
+					//enableComponents(buttonPanel, false);
 					try {
-						treeBST.addNode(value);
-						treePanel.setNodePanel(treeBST.getTree());
-						treePanel.setLocation();
-						treePanel.setNodePanel(treeBST.getTree());
-						treePanel.startAction();
-						logField.setText("node " + value + " added");
-						enableComponents(buttonPanel, true);
+						//find Path
+						treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
+						if (treePanel.listVisitedNode.size() != 0) {
+							Thread thread = new Thread(new Runnable() {
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									try {
+										logField.setText("Adding " + value + ".....");
+										for (Node i : treePanel.listVisitedNode) {
+//											if(i.getValue()>value) {
+//												logField.setText(value+" < "+i.getValue()+"=>get leftChild");
+//											}else if(i.getValue()<value) {
+//												logField.setText(value+" > "+i.getValue()+"=>get rightChild");
+//											}
+											treeBST.setColorForTree();
+											treePanel.repaint();
+											Node highLightNode = treeBST.searchNode(i.getValue());
+											highLightNode.setStatus(Node.nodePath);
+											treePanel.repaint();
+											Thread.sleep(1000);
+										}
+										logField.setText("node " + value + " added");
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							thread.start();
+						}
+						//add node
+						new java.util.Timer().schedule(
+								new java.util.TimerTask() {
+							@Override
+							public void run() {
+								try {
+									treeBST.addNode(value);
+									treePanel.setLocation();
+									treePanel.setNodePanel(treeBST.getTree());
+									treePanel.startAction();
+									logField.setText("node " + value + " added");
+									enableComponents(buttonPanel, true);
+								} catch (Exception e) {
+									// TODO: handle exception
+									logField.setText(e.getMessage());
+								}
+							}
+						}, (treePanel.listVisitedNode.size() + 1) * 1000);
+						
 					} catch (Exception addBST) {
 						enableComponents(buttonPanel, true);
 						logField.setText(addBST.getMessage());
@@ -143,31 +185,67 @@ public class GUI extends JFrame {
 						return;
 					}
 					try {
-						treeAVL.addNode(value);
-						treePanel.setNodePanel(treeAVL.getTree());
-						treePanel.setLocation();
-						treePanel.setNodePanel(treeAVL.getTree());
-						treePanel.startAction();
-						logField.setText("node " + value + " added");
-						Node nodeAdded = treeAVL.searchNode(value);
-						Node degNode = treeAVL.chekDeg(nodeAdded);
-						if (degNode != null)
-							repaint();
-						if (degNode != null) {
-							logField.setText("node " + value + " added with ...");
-							enableComponents(buttonPanel, false);
-							new java.util.Timer().schedule(new java.util.TimerTask() {
+						//find path
+						logField.setText("Adding " + value + ".....");
+						treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
+						if (treePanel.listVisitedNode.size() != 0) {
+							Thread thread = new Thread(new Runnable() {
 								@Override
 								public void run() {
-									degNode.setStatus(Node.nodeColor);
-									String rotateType = treeAVL.typeOfRotation(degNode);
+									// TODO Auto-generated method stub
+									try {
+										for (Node i : treePanel.listVisitedNode) {
+											treeAVL.setColorForTree();
+											treePanel.repaint();
+											Node highLightNode = treeAVL.searchNode(i.getValue());
+											highLightNode.setStatus(Node.nodePath);
+											treePanel.repaint();
+											Thread.sleep(1000);
+										}
+										logField.setText("node " + value + " added");
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							thread.start();
+						}
+						//add Node
+						new java.util.Timer().schedule(
+								new java.util.TimerTask() {
+							@Override
+							public void run() {
+								try {
+									treeAVL.addNode(value);
+									treePanel.setLocation();
 									treePanel.setNodePanel(treeAVL.getTree());
 									treePanel.startAction();
-									enableComponents(buttonPanel, true);
-									logField.setText("node " + value + " added with " + rotateType);
+									Node nodeAdded = treeAVL.searchNode(value);
+									Node degNode = treeAVL.chekDeg(nodeAdded);
+									if (degNode != null)
+										repaint();
+									if (degNode != null) {
+										logField.setText("node " + value + " added with ...");
+										enableComponents(buttonPanel, false);
+										new java.util.Timer().schedule(new java.util.TimerTask() {
+											@Override
+											public void run() {
+												degNode.setStatus(Node.nodeColor);
+												String rotateType = treeAVL.typeOfRotation(degNode);
+												treePanel.setNodePanel(treeAVL.getTree());
+												treePanel.startAction();
+												enableComponents(buttonPanel, true);
+												logField.setText("node " + value + " added with " + rotateType);
+											}
+										}, 2000);
+									}
+
+								} catch (Exception e) {
+									// TODO: handle exception
+									logField.setText(e.getMessage());
 								}
-							}, 2000);
-						}
+							}
+						}, (treePanel.listVisitedNode.size() + 1) * 1000);
 					} catch (Exception avl) {
 						logField.setText(avl.getMessage());
 					}
@@ -208,23 +286,56 @@ public class GUI extends JFrame {
 				if (comboboxTree.getSelectedItem() == "BST Tree") {
 
 					treePanel.setNodePanel(treeBST.getTree());
-					enableComponents(buttonPanel, false);
+					//enableComponents(buttonPanel, false);
 					try {
-						treeBST.addNode(value);
-
-						// FindPath
+					// FindPath
 						treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
-						for (Node i : treePanel.listVisitedNode) {
-							System.out.println(i.getValue());
+						if (treePanel.listVisitedNode.size() != 0) {
+							Thread thread = new Thread(new Runnable() {
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									try {
+										logField.setText("Adding " + value + ".....");
+										for (Node i : treePanel.listVisitedNode) {
+//											if(i.getValue()>value) {
+//												logField.setText(value+" < "+i.getValue()+"=>get leftChild");
+//											}else if(i.getValue()<value) {
+//												logField.setText(value+" > "+i.getValue()+"=>get rightChild");
+//											}
+											treeBST.setColorForTree();
+											treePanel.repaint();
+											Node highLightNode = treeBST.searchNode(i.getValue());
+											highLightNode.setStatus(Node.nodePath);
+											treePanel.repaint();
+											Thread.sleep(1000);
+										}
+										logField.setText("node " + value + " added");
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							thread.start();
 						}
-						System.out.println("=================");
-
-						treePanel.setNodePanel(treeBST.getTree());
-						treePanel.setLocation();
-						treePanel.setNodePanel(treeBST.getTree());
-						treePanel.startAction();
-						logField.setText("node " + value + " added");
-						enableComponents(buttonPanel, true);
+						//add Node
+						new java.util.Timer().schedule(
+								new java.util.TimerTask() {
+							@Override
+							public void run() {
+								try {
+									treeBST.addNode(value);
+									treePanel.setLocation();
+									treePanel.setNodePanel(treeBST.getTree());
+									treePanel.startAction();
+									logField.setText("node " + value + " added");
+									enableComponents(buttonPanel, true);
+								} catch (Exception e) {
+									// TODO: handle exception
+									logField.setText(e.getMessage());
+								}
+							}
+						}, (treePanel.listVisitedNode.size() + 1) * 1000);
 					} catch (Exception addBST) {
 						enableComponents(buttonPanel, true);
 						logField.setText(addBST.getMessage());
@@ -232,6 +343,7 @@ public class GUI extends JFrame {
 				}
 				// ******************* Add rand with AVL *******************
 				else {
+					//find path
 					logField.setText("Adding " + value + ".....");
 					treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
 					if (treePanel.listVisitedNode.size() != 0) {
@@ -246,7 +358,7 @@ public class GUI extends JFrame {
 										Node highLightNode = treeAVL.searchNode(i.getValue());
 										highLightNode.setStatus(Node.nodePath);
 										treePanel.repaint();
-										Thread.sleep(2000);
+										Thread.sleep(1000);
 									}
 									logField.setText("node " + value + " added");
 								} catch (Exception e) {
@@ -256,7 +368,9 @@ public class GUI extends JFrame {
 						});
 						thread.start();
 					}
-					new java.util.Timer().schedule(new java.util.TimerTask() {
+					//add Node
+					new java.util.Timer().schedule(
+							new java.util.TimerTask() {
 						@Override
 						public void run() {
 							try {
@@ -289,7 +403,7 @@ public class GUI extends JFrame {
 								logField.setText(e.getMessage());
 							}
 						}
-					}, (treePanel.listVisitedNode.size() + 1) * 2000);
+					}, (treePanel.listVisitedNode.size() + 1) * 1000);
 
 				}
 			}

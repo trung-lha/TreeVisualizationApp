@@ -16,6 +16,7 @@ public class Node {
 	public static final int replaceColor = 4;
 	public static final int searchColor = 5;
 	public static final int nodeColor = 6;
+	public static final int nodePath = 7;
 	
 	private Node parent;
 	private Node leftChild;

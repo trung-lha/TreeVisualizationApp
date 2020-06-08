@@ -18,24 +18,27 @@ public class TreePanel extends JPanel implements ActionListener{
 	private Graphics2D g2;
 	private Node root;
 	private int done;
-	public List<Node> checkedNode =new ArrayList();
+	public List<Node> listVisitedNode =new ArrayList();
 	Timer tm = new Timer(25, this);
 	
-	public List<Node> findPath(Node root,int value){
-		List<Node> checkedNode =new ArrayList();
-		findPath(root,value,checkedNode);
+	public List<Node> findPath(Node root, int value) {
+		List<Node> checkedNode = new ArrayList();
+		findPath(root, value, checkedNode);
 		return checkedNode;
 	}
-	
-	public void findPath(Node root,int value,List<Node> checkedNode) {
-		if(root.getValue()==value) {
-			return ;
-		}else if(root.getValue()>value) {
+
+	public void findPath(Node root, int value, List<Node> checkedNode) {
+		if (root == null) {
+			return;
+		}
+		if (root.getValue() == value) {
+			return;
+		} else if (root.getValue() > value) {
 			checkedNode.add(new Node(root.getValue()));
-			findPath(root.getLeftChild(),value,checkedNode);
-		}else {
+			findPath(root.getLeftChild(), value, checkedNode);
+		} else {
 			checkedNode.add(new Node(root.getValue()));
-			findPath(root.getRightChild(),value,checkedNode);
+			findPath(root.getRightChild(), value, checkedNode);
 		}
 	}
 
@@ -154,6 +157,9 @@ public class TreePanel extends JPanel implements ActionListener{
 		}
 		if (root.getStatus() == Node.replaceColor) {
 			g2.setColor(Color.PINK);
+		}
+		if (root.getStatus() == Node.nodePath) {
+			g2.setColor(Color.BLUE);
 		}
 		g2.fillOval((int)root.getX(),(int) root.getY(), 36, 36);
 

@@ -117,7 +117,7 @@ public class GUI extends JFrame {
 						logField.setText("'" + valueField.getText() + "' is not a number");
 						return;
 					}
-					//enableComponents(buttonPanel, false);
+					enableComponents(buttonPanel, false);
 					try {
 						//find Path
 						treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
@@ -162,6 +162,7 @@ public class GUI extends JFrame {
 									logField.setText("node " + value + " added");
 									enableComponents(buttonPanel, true);
 								} catch (Exception e) {
+									enableComponents(buttonPanel, true);
 									// TODO: handle exception
 									logField.setText(e.getMessage());
 								}
@@ -186,6 +187,7 @@ public class GUI extends JFrame {
 					}
 					try {
 						//find path
+						enableComponents(buttonPanel, false);
 						logField.setText("Adding " + value + ".....");
 						treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
 						if (treePanel.listVisitedNode.size() != 0) {
@@ -239,9 +241,11 @@ public class GUI extends JFrame {
 											}
 										}, 2000);
 									}
+									enableComponents(buttonPanel, true);
 
 								} catch (Exception e) {
 									// TODO: handle exception
+									enableComponents(buttonPanel, true);
 									logField.setText(e.getMessage());
 								}
 							}
@@ -286,7 +290,7 @@ public class GUI extends JFrame {
 				if (comboboxTree.getSelectedItem() == "BST Tree") {
 
 					treePanel.setNodePanel(treeBST.getTree());
-					//enableComponents(buttonPanel, false);
+					enableComponents(buttonPanel, false);
 					try {
 					// FindPath
 						treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
@@ -332,6 +336,7 @@ public class GUI extends JFrame {
 									enableComponents(buttonPanel, true);
 								} catch (Exception e) {
 									// TODO: handle exception
+									enableComponents(buttonPanel, true);
 									logField.setText(e.getMessage());
 								}
 							}
@@ -343,6 +348,7 @@ public class GUI extends JFrame {
 				}
 				// ******************* Add rand with AVL *******************
 				else {
+					enableComponents(buttonPanel, false);
 					//find path
 					logField.setText("Adding " + value + ".....");
 					treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
@@ -397,9 +403,11 @@ public class GUI extends JFrame {
 										}
 									}, 2000);
 								}
+								enableComponents(buttonPanel,true);
 
 							} catch (Exception e) {
 								// TODO: handle exception
+								enableComponents(buttonPanel,true);
 								logField.setText(e.getMessage());
 							}
 						}
@@ -410,7 +418,7 @@ public class GUI extends JFrame {
 		});
 	}
 
-// ********************************************* Setting for Remove Button  **********************************
+//********************************************* Setting for Remove Button  **********************************
 	
 	public void removeButtonSetting() {
 		removeButton.setBackground(new Color(239,219,0));

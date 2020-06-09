@@ -1,6 +1,7 @@
 package tree.logic;
 
-import javax.swing.JOptionPane;
+import exception.ExceptionForProject;
+import exception.ExceptionSearch;
 
 public class AVLTree extends BSTTree{
 	
@@ -270,19 +271,21 @@ public class AVLTree extends BSTTree{
 			tree = leftGrandson;
 		}
 	}
-	public Node searchNode(int value) {
+	public Node searchNode(int value) throws ExceptionForProject {
 //		this.setColorForTree();
+		if (tree == null)
+			throw new ExceptionSearch();
 		Node result = searchNode(tree, value);
 		if (result != null) {
 			return result;
 		} 
 		return result;
 	}
-	public Node addNode (Node localNode, int value) throws Exception{
+	public Node addNode (Node localNode, int value) throws ExceptionForProject{
 		try {
 			Node newNode = super.addNode(localNode, value);
 			return newNode;
-		} catch (Exception ErrorAdd) {
+		} catch (ExceptionForProject ErrorAdd) {
 			throw ErrorAdd;
 		}
 	}

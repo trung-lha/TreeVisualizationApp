@@ -1,6 +1,8 @@
 package tree.logic;
 
-import exception.ExceptionErrorAdd;
+import exception.ExceptionAdd;
+import exception.ExceptionForProject;
+import exception.ExceptionSearch;
 
 public class BSTTree {
 	protected Node tree;
@@ -32,7 +34,7 @@ public class BSTTree {
 		}
 	}
 
-	public Node addNode(int value) throws Exception {
+	public Node addNode(int value) throws ExceptionForProject {
 		this.setColorForTree();
 		Node node = new Node(value);
 		if (tree == null) {
@@ -42,7 +44,7 @@ public class BSTTree {
 			try {
 				node = addNode(tree, value);
 				return node;
-			} catch (Exception e) {
+			} catch (ExceptionForProject e) {
 				throw e;
 			}
 		}
@@ -60,7 +62,7 @@ public class BSTTree {
 		recalcHeight(localNode.getParent());
 	}
 
-	public Node addNode(Node localNode, int value) throws Exception {
+	public Node addNode(Node localNode, int value) throws ExceptionForProject {
 
 		Node newNode = new Node(value);
 		if (localNode == null) {
@@ -88,7 +90,7 @@ public class BSTTree {
 					addNode(localNode.getRightChild(), value);
 				}
 			} else {
-				throw new ExceptionErrorAdd("Can't add cause the value " + value + " is existed");
+				throw new ExceptionAdd();
 			}
 			return null;
 		}
@@ -106,8 +108,11 @@ public class BSTTree {
 	}
 
 	// search Node
-	public Node searchNode(int value) {
+	public Node searchNode(int value) throws ExceptionForProject {
 		this.setColorForTree();
+		if (tree == null) {
+			throw new ExceptionSearch();
+		}
 		Node result = searchNode(tree, value);
 		if (result != null) {
 			return result;

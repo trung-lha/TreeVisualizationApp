@@ -18,13 +18,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import exception.ExceptionForProject;
 import tree.logic.AVLTree;
 import tree.logic.BSTTree;
 import tree.logic.Node;
 
 public class GUI extends JFrame {
 
-	String treeType[] = {"AVL Tree", "BST Tree" };
+	String treeType[] = { "AVL Tree", "BST Tree" };
 	JComboBox comboboxTree = new JComboBox(treeType);
 
 	private BSTTree treeBST;
@@ -48,7 +49,7 @@ public class GUI extends JFrame {
 		setResizable(true);
 		treePanel = new TreePanel();
 		logPanel = new JPanel();
-		logField = new JLabel("Please add a number");
+		logField = new JLabel("Please select kind of Algorithm");
 		logField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		logPanel.add(logField);
 
@@ -79,12 +80,12 @@ public class GUI extends JFrame {
 		// ************ clear tree setting ***********************
 		clearButton = new JButton("Remove tree");
 		clearButtonSetting();
-		
+
 		// ************ Select option box setting *****************
-		comboboxTree.setBackground(new Color(33,184,191));
+		comboboxTree.setBackground(new Color(33, 184, 191));
 		comboboxTree.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		buttonPanel.add(comboboxTree);
-		buttonPanel.setBackground(new Color(226,245,251));
+		buttonPanel.setBackground(new Color(226, 245, 251));
 		treePanel.setBackground(Color.WHITE);
 
 		getContentPane().add(buttonPanel, BorderLayout.NORTH);
@@ -94,20 +95,18 @@ public class GUI extends JFrame {
 		setVisible(true);
 
 	}
-	
-	
 
 // ********************************************** Setting for AddButton ********************************************
-	
+
 	private void addButtonSetting() {
-		addButton.setBackground(new Color(33,184,191));
+		addButton.setBackground(new Color(33, 184, 191));
 		addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				// *************** Add with BST *************************
 				if (comboboxTree.getSelectedItem() == "BST Tree") {
-					
+
 					treePanel.setNodePanel(treeBST.getTree());
 					int value;
 					try {
@@ -118,63 +117,56 @@ public class GUI extends JFrame {
 						return;
 					}
 					enableComponents(buttonPanel, false);
-					try {
-						//find Path
-						treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
-						if (treePanel.listVisitedNode.size() != 0) {
-							Thread thread = new Thread(new Runnable() {
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									try {
-										logField.setText("Adding " + value + ".....");
-										for (Node i : treePanel.listVisitedNode) {
-//											if(i.getValue()>value) {
-//												logField.setText(value+" < "+i.getValue()+"=>get leftChild");
-//											}else if(i.getValue()<value) {
-//												logField.setText(value+" > "+i.getValue()+"=>get rightChild");
-//											}
-											treeBST.setColorForTree();
-											treePanel.repaint();
-											Node highLightNode = treeBST.searchNode(i.getValue());
-											highLightNode.setStatus(Node.nodePath);
-											treePanel.repaint();
-											Thread.sleep(1000);
-										}
-										logField.setText("node " + value + " added");
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							});
-							thread.start();
-						}
-						//add node
-						new java.util.Timer().schedule(
-								new java.util.TimerTask() {
+					// find Path
+					treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
+
+					if (treePanel.listVisitedNode.size() != 0) {
+						Thread thread = new Thread(new Runnable() {
 							@Override
 							public void run() {
 								try {
-									treeBST.addNode(value);
-									treePanel.setLocation();
-									treePanel.setNodePanel(treeBST.getTree());
-									treePanel.startAction();
-									logField.setText("node " + value + " added");
-									enableComponents(buttonPanel, true);
+									for (Node i : treePanel.listVisitedNode) {
+										treeBST.setColorForTree();
+										treePanel.repaint();
+										int last = i.getValue();
+										if (last > value) {
+											logField.setText("Adding " + value + ": Go to left child cause " + value
+													+ " < " + last);
+										} else {
+											logField.setText("Adding " + value + ": Go to right child cause " + value
+													+ " > " + last);
+										}
+										Node highLightNode = treeBST.searchNode(i.getValue());
+										highLightNode.setStatus(Node.nodePath);
+										treePanel.repaint();
+										Thread.sleep(2000);
+									}
 								} catch (Exception e) {
-									enableComponents(buttonPanel, true);
-									// TODO: handle exception
-									logField.setText(e.getMessage());
+									e.printStackTrace();
 								}
 							}
-						}, (treePanel.listVisitedNode.size() + 1) * 1000);
-						
-					} catch (Exception addBST) {
-						enableComponents(buttonPanel, true);
-						logField.setText(addBST.getMessage());
+						});
+						thread.start();
 					}
+					// add node
+					new java.util.Timer().schedule(new java.util.TimerTask() {
+						@Override
+						public void run() {
+							try {
+								treeBST.addNode(value);
+								treePanel.setNodePanel(treeBST.getTree());
+								treePanel.setLocation();
+								treePanel.startAction();
+								logField.setText("node " + value + " added");
+								enableComponents(buttonPanel, true);
+							} catch (ExceptionForProject addBST) {
+								enableComponents(buttonPanel, true);
+								logField.setText(addBST.notification());
+							}
+						}
+					}, (treePanel.listVisitedNode.size()) * 2000 + 1000);
 				}
-				// ******************* Add with AVL *******************
+				// ******************************** Add with AVL **************************
 				else {
 					treePanel.setNodePanel(treeAVL.getTree());
 					int value;
@@ -185,84 +177,104 @@ public class GUI extends JFrame {
 						logField.setText("" + valueField.getText() + "is not a number");
 						return;
 					}
-					try {
-						//find path
-						enableComponents(buttonPanel, false);
-						logField.setText("Adding " + value + ".....");
-						treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
-						if (treePanel.listVisitedNode.size() != 0) {
-							Thread thread = new Thread(new Runnable() {
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									try {
-										for (Node i : treePanel.listVisitedNode) {
-											treeAVL.setColorForTree();
-											treePanel.repaint();
-											Node highLightNode = treeAVL.searchNode(i.getValue());
-											highLightNode.setStatus(Node.nodePath);
-											treePanel.repaint();
-											Thread.sleep(1000);
-										}
-										logField.setText("node " + value + " added");
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							});
-							thread.start();
-						}
-						//add Node
-						new java.util.Timer().schedule(
-								new java.util.TimerTask() {
+					// find path
+					enableComponents(buttonPanel, false);
+					treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
+					if (treePanel.listVisitedNode.size() != 0) {
+						Thread thread = new Thread(new Runnable() {
 							@Override
 							public void run() {
 								try {
-									treeAVL.addNode(value);
-									treePanel.setLocation();
-									treePanel.setNodePanel(treeAVL.getTree());
-									treePanel.startAction();
-									Node nodeAdded = treeAVL.searchNode(value);
-									Node degNode = treeAVL.chekDeg(nodeAdded);
-									if (degNode != null)
-										repaint();
-									if (degNode != null) {
-										logField.setText("node " + value + " added with ...");
-										enableComponents(buttonPanel, false);
-										new java.util.Timer().schedule(new java.util.TimerTask() {
-											@Override
-											public void run() {
-												degNode.setStatus(Node.nodeColor);
-												String rotateType = treeAVL.typeOfRotation(degNode);
-												treePanel.setNodePanel(treeAVL.getTree());
-												treePanel.startAction();
-												enableComponents(buttonPanel, true);
-												logField.setText("node " + value + " added with " + rotateType);
-											}
-										}, 2000);
+									for (Node i : treePanel.listVisitedNode) {
+										treeAVL.setColorForTree();
+										treePanel.repaint();
+										int last = i.getValue();
+										if (last > value) {
+											logField.setText("Adding " + value + ": Go to left child cause " + value
+													+ " < " + last);
+										} else {
+											logField.setText("Adding " + value + ": Go to right child cause " + value
+													+ " > " + last);
+										}
+										Node highLightNode = treeAVL.searchNode(i.getValue());
+										highLightNode.setStatus(Node.nodePath);
+										treePanel.repaint();
+										Thread.sleep(2000);
 									}
-									enableComponents(buttonPanel, true);
-
+									logField.setText("node " + value + " added");
 								} catch (Exception e) {
-									// TODO: handle exception
-									enableComponents(buttonPanel, true);
-									logField.setText(e.getMessage());
+									e.printStackTrace();
 								}
 							}
-						}, (treePanel.listVisitedNode.size() + 1) * 1000);
-					} catch (Exception avl) {
-						logField.setText(avl.getMessage());
+						});
+						thread.start();
 					}
-				} 
+					// add Node
+					new java.util.Timer().schedule(new java.util.TimerTask() {
+						@Override
+						public void run() {
+							try {
+								treeAVL.addNode(value);
+								treePanel.setNodePanel(treeAVL.getTree());
+								treePanel.setLocation();
+								logField.setText("Node " + value + " has added. ");
+								treePanel.startAction();
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										logField.setText(" Check new Tree is balance ?");
+									}
+								}, 2000);
+								// check degNode
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										try {
+											Node nodeAdded = treeAVL.searchNode(value);
+											Node degNode = treeAVL.chekDeg(nodeAdded);
+											if (degNode != null) {
+												logField.setText("Found an unbalance node in new tree. Rotating ...");
+												repaint();
+											} else {
+												logField.setText("Not found unbalance node in new tree.");
+											}
+											if (degNode != null) {
+												enableComponents(buttonPanel, false);
+												new java.util.Timer().schedule(new java.util.TimerTask() {
+													@Override
+													public void run() {
+														degNode.setStatus(Node.nodeColor);
+														String rotateType = treeAVL.typeOfRotation(degNode);
+														treePanel.setNodePanel(treeAVL.getTree());
+														treePanel.startAction();
+														enableComponents(buttonPanel, true);
+														logField.setText("Rotating node with " + rotateType);
+													}
+												}, 2000);
+											}
+										} catch (ExceptionForProject e) {
+											enableComponents(buttonPanel, true);
+											logField.setText(e.notification());
+										}
+									}
+								}, 4000);
+								enableComponents(buttonPanel, true);
+							} catch (ExceptionForProject e) {
+								enableComponents(buttonPanel, true);
+								logField.setText(e.notification());
+							}
+						}
+					}, treePanel.listVisitedNode.size() * 2000 + 1000);
+				}
 			}
 		});
-		
+
 	}
 
 // ********************************************* Setting for clearButton ************************************	
 
 	private void clearButtonSetting() {
-		clearButton.setBackground(new Color(242,96,39));
+		clearButton.setBackground(new Color(242, 96, 39));
 		clearButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -291,82 +303,29 @@ public class GUI extends JFrame {
 
 					treePanel.setNodePanel(treeBST.getTree());
 					enableComponents(buttonPanel, false);
-					try {
 					// FindPath
-						treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
-						if (treePanel.listVisitedNode.size() != 0) {
-							Thread thread = new Thread(new Runnable() {
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									try {
-										logField.setText("Adding " + value + ".....");
-										for (Node i : treePanel.listVisitedNode) {
-//											if(i.getValue()>value) {
-//												logField.setText(value+" < "+i.getValue()+"=>get leftChild");
-//											}else if(i.getValue()<value) {
-//												logField.setText(value+" > "+i.getValue()+"=>get rightChild");
-//											}
-											treeBST.setColorForTree();
-											treePanel.repaint();
-											Node highLightNode = treeBST.searchNode(i.getValue());
-											highLightNode.setStatus(Node.nodePath);
-											treePanel.repaint();
-											Thread.sleep(1000);
-										}
-										logField.setText("node " + value + " added");
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							});
-							thread.start();
-						}
-						//add Node
-						new java.util.Timer().schedule(
-								new java.util.TimerTask() {
-							@Override
-							public void run() {
-								try {
-									treeBST.addNode(value);
-									treePanel.setLocation();
-									treePanel.setNodePanel(treeBST.getTree());
-									treePanel.startAction();
-									logField.setText("node " + value + " added");
-									enableComponents(buttonPanel, true);
-								} catch (Exception e) {
-									// TODO: handle exception
-									enableComponents(buttonPanel, true);
-									logField.setText(e.getMessage());
-								}
-							}
-						}, (treePanel.listVisitedNode.size() + 1) * 1000);
-					} catch (Exception addBST) {
-						enableComponents(buttonPanel, true);
-						logField.setText(addBST.getMessage());
-					}
-				}
-				// ******************* Add rand with AVL *******************
-				else {
-					enableComponents(buttonPanel, false);
-					//find path
-					logField.setText("Adding " + value + ".....");
-					treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
+					treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
 					if (treePanel.listVisitedNode.size() != 0) {
 						Thread thread = new Thread(new Runnable() {
 							@Override
 							public void run() {
-								// TODO Auto-generated method stub
 								try {
 									for (Node i : treePanel.listVisitedNode) {
-										treeAVL.setColorForTree();
+										treeBST.setColorForTree();
 										treePanel.repaint();
-										Node highLightNode = treeAVL.searchNode(i.getValue());
+										int last = i.getValue();
+										if (last > value) {
+											logField.setText("Adding " + value + ": Go to left child cause " + value
+													+ " < " + last);
+										} else {
+											logField.setText("Adding " + value + ": Go to right child cause " + value
+													+ " > " + last);
+										}
+										Node highLightNode = treeBST.searchNode(i.getValue());
 										highLightNode.setStatus(Node.nodePath);
 										treePanel.repaint();
-										Thread.sleep(1000);
+										Thread.sleep(2000);
 									}
-									logField.setText("node " + value + " added");
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
@@ -374,44 +333,113 @@ public class GUI extends JFrame {
 						});
 						thread.start();
 					}
-					//add Node
-					new java.util.Timer().schedule(
-							new java.util.TimerTask() {
+					// add Node
+					new java.util.Timer().schedule(new java.util.TimerTask() {
+						@Override
+						public void run() {
+							try {
+								treeBST.addNode(value);
+								treePanel.setNodePanel(treeBST.getTree());
+								treePanel.setLocation();
+								treePanel.startAction();
+								logField.setText("Node " + value + "has added.");
+								enableComponents(buttonPanel, true);
+							} catch (ExceptionForProject addBST) {
+								enableComponents(buttonPanel, true);
+								logField.setText(addBST.notification());
+							}
+						}
+					}, treePanel.listVisitedNode.size() * 2000 + 1000);
+				}
+				// ******************* Add rand with AVL *******************
+				else {
+					enableComponents(buttonPanel, false);
+					// find path
+					treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
+					if (treePanel.listVisitedNode.size() != 0) {
+						Thread thread = new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									for (Node i : treePanel.listVisitedNode) {
+										treeAVL.setColorForTree();
+										treePanel.repaint();
+										int last = i.getValue();
+										if (last > value) {
+											logField.setText("Adding " + value + ": Go to left child cause " + value
+													+ " < " + last);
+										} else {
+											logField.setText("Adding " + value + ": Go to right child cause " + value
+													+ " > " + last);
+										}
+										Node highLightNode = treeAVL.searchNode(i.getValue());
+										highLightNode.setStatus(Node.nodePath);
+										treePanel.repaint();
+										Thread.sleep(2000);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						thread.start();
+					}
+					// add Node
+					new java.util.Timer().schedule(new java.util.TimerTask() {
 						@Override
 						public void run() {
 							try {
 								treeAVL.addNode(value);
-								treePanel.setLocation();
 								treePanel.setNodePanel(treeAVL.getTree());
+								treePanel.setLocation();
+								logField.setText("Node " + value + " has added. ");
 								treePanel.startAction();
-								Node nodeAdded = treeAVL.searchNode(value);
-								Node degNode = treeAVL.chekDeg(nodeAdded);
-								if (degNode != null)
-									repaint();
-								if (degNode != null) {
-									logField.setText("node " + value + " added with ...");
-									enableComponents(buttonPanel, false);
-									new java.util.Timer().schedule(new java.util.TimerTask() {
-										@Override
-										public void run() {
-											degNode.setStatus(Node.nodeColor);
-											String rotateType = treeAVL.typeOfRotation(degNode);
-											treePanel.setNodePanel(treeAVL.getTree());
-											treePanel.startAction();
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										logField.setText(" Check new Tree is balance ?");
+									}
+								}, 2000);
+								// check degNode
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										try {
+											Node nodeAdded = treeAVL.searchNode(value);
+											Node degNode = treeAVL.chekDeg(nodeAdded);
+											if (degNode != null) {
+												logField.setText("Found an unbalance node in new tree. Rotating ...");
+												repaint();
+											} else {
+												logField.setText("Not found unbalance node in new tree.");
+											}
+											if (degNode != null) {
+												enableComponents(buttonPanel, false);
+												new java.util.Timer().schedule(new java.util.TimerTask() {
+													@Override
+													public void run() {
+														degNode.setStatus(Node.nodeColor);
+														String rotateType = treeAVL.typeOfRotation(degNode);
+														treePanel.setNodePanel(treeAVL.getTree());
+														treePanel.startAction();
+														enableComponents(buttonPanel, true);
+														logField.setText("Rotating node with " + rotateType);
+													}
+												}, 2000);
+											}
+										} catch (ExceptionForProject e) {
 											enableComponents(buttonPanel, true);
-											logField.setText("node " + value + " added with " + rotateType);
+											logField.setText(e.notification());
 										}
-									}, 2000);
-								}
-								enableComponents(buttonPanel,true);
-
-							} catch (Exception e) {
-								// TODO: handle exception
-								enableComponents(buttonPanel,true);
-								logField.setText(e.getMessage());
+									}
+								}, 4000);
+								enableComponents(buttonPanel, true);
+							} catch (ExceptionForProject e) {
+								enableComponents(buttonPanel, true);
+								logField.setText(e.notification());
 							}
 						}
-					}, (treePanel.listVisitedNode.size() + 1) * 1000);
+					}, treePanel.listVisitedNode.size() * 2000 + 1000);
 
 				}
 			}
@@ -419,9 +447,9 @@ public class GUI extends JFrame {
 	}
 
 //********************************************* Setting for Remove Button  **********************************
-	
+
 	public void removeButtonSetting() {
-		removeButton.setBackground(new Color(239,219,0));
+		removeButton.setBackground(new Color(239, 219, 0));
 		removeButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		removeButton.addActionListener(new ActionListener() {
 
@@ -433,103 +461,92 @@ public class GUI extends JFrame {
 					logField.setText(valueField.getText() + " is not number.");
 					return;
 				}
-				// ******************************** Remove for BST ******************************************
+				// ******************************** Remove for BST
+				// ******************************************
+
 				if (comboboxTree.getSelectedItem() == "BST Tree") {
-					    enableComponents(buttonPanel, false);
-						//find Path
-						treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
-						if (treePanel.listVisitedNode.size() != 0) {
-							Thread thread = new Thread(new Runnable() {
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									try {
-										logField.setText("Searching " + value + ".....");
-										//them node can xoa vao list Highlight
-										treePanel.listVisitedNode.add(new Node(value));
-										for (Node i : treePanel.listVisitedNode) {
-											treeBST.setColorForTree();
-											treePanel.repaint();
-											Node highLightNode = treeBST.searchNode(i.getValue());
-											highLightNode.setStatus(Node.nodePath);
-											treePanel.repaint();
-											Thread.sleep(1000);
-										}
-										//logField.setText("node " + value + " added");
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							});
-							thread.start();
-						}
-						
-						new java.util.Timer().schedule(new java.util.TimerTask() {
+					enableComponents(buttonPanel, false);
+					// find Path
+					treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
+					if (treePanel.listVisitedNode.size() != 0) {
+						Thread thread = new Thread(new Runnable() {
 							@Override
 							public void run() {
 								try {
+									logField.setText("Searching " + value + " to remove...");
+									for (Node i : treePanel.listVisitedNode) {
+										treeBST.setColorForTree();
+										treePanel.repaint();
+										Node highLightNode = treeBST.searchNode(i.getValue());
+										highLightNode.setStatus(Node.nodePath);
+										treePanel.repaint();
+										Thread.sleep(1000);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						thread.start();
+					}
+
+					new java.util.Timer().schedule(new java.util.TimerTask() {
+						@Override
+						public void run() {
+							try {
+								treeBST.setColorForTree();
+								treePanel.repaint();
 								Node forRemove = treeBST.searchNode(value);
-								if(forRemove == null) {
+								if (forRemove == null) {
 									enableComponents(buttonPanel, true);
 									logField.setText("node " + value + " is not exist");
 									return;
+								} else {
+									forRemove.setStatus(Node.removeColor);
+									treePanel.setNodePanel(treeBST.getTree());
+									repaint();
 								}
-								forRemove.setStatus(Node.removeColor);
-								treePanel.setNodePanel(treeBST.getTree());
-								repaint();
-								logField.setText("Find a replace node for remove ...");
-								treeBST.findReplaceNodeForRemove(forRemove);
-								repaint();
-								logField.setText("Assign replaceNode's value to Remove's value ");
-								treeBST.setColorForTree();
-								treeBST.removeNode(forRemove);
-								treePanel.setNodePanel(treeBST.getTree());;
-								treePanel.startAction();
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										logField.setText("Find a replace node for remove ...");
+										treeBST.findReplaceNodeForRemove(forRemove);
+										repaint();
+									}
+								}, 2000);
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										treeBST.setColorForTree();
+										treeBST.removeNode(forRemove);
+										treePanel.setNodePanel(treeBST.getTree());
+										treePanel.startAction();
+										enableComponents(buttonPanel, true);
+										logField.setText("node " + value + " removed");
+									}
+								}, 4000);
+							} catch (ExceptionForProject rv) {
 								enableComponents(buttonPanel, true);
-								logField.setText("node " + value + " removed");
-								}catch(Exception e){
-									enableComponents(buttonPanel, true);
-									logField.setText(e.getMessage());
-								}
+								logField.setText(rv.notification());
 							}
-							}, (treePanel.listVisitedNode.size()+1)*1000);
-						
-					//code cu cua Trung					
-//					new java.util.Timer().schedule(new java.util.TimerTask() {
-//						@Override
-//						public void run() {
-//							treeBST.findReplaceNodeForRemove(forRemove);
-//							repaint();
-//							logField.setText("Assign replaceNode's value to Remove's value ");
-//						}
-//					}, (treePanel.listVisitedNode.size()+1)*1000);
-					//enableComponents(buttonPanel, false);
-//					new java.util.Timer().schedule(new java.util.TimerTask() {
-//						@Override
-//						public void run() {
-//							treeBST.setColorForTree();
-//							treeBST.removeNode(forRemove);
-//							treePanel.setNodePanel(treeBST.getTree());;
-//							treePanel.startAction();
-//							enableComponents(buttonPanel, true);
-//							logField.setText("node " + value + " removed");
-//						}
-//					}, 5000);
+						}
+					}, (treePanel.listVisitedNode.size() + 1) * 1000);
+					logField.setText("node " + value + " removed");
+
 				}
-				// ******************************** Remove for AVL ******************************************
+				// ******************************** Remove for AVL
+				// ******************************************
 				else {
-					//enableComponents(buttonPanel, false);
-					//find Path
+					enableComponents(buttonPanel, false);
+					// find Path
 					treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
 					if (treePanel.listVisitedNode.size() != 0) {
 						Thread thread = new Thread(new Runnable() {
 							@Override
 							public void run() {
-								// TODO Auto-generated method stub
 								try {
-									logField.setText("Searching " + value + ".....");
-									//them node can xoa vao list Highlight
-									treePanel.listVisitedNode.add(new Node(value));
+									logField.setText("Searching " + value + " to remove .....");
+//									treePanel.listVisitedNode.add(new Node(value));
 									for (Node i : treePanel.listVisitedNode) {
 										treeAVL.setColorForTree();
 										treePanel.repaint();
@@ -538,7 +555,6 @@ public class GUI extends JFrame {
 										treePanel.repaint();
 										Thread.sleep(1000);
 									}
-									//logField.setText("node " + value + " added");
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
@@ -546,7 +562,7 @@ public class GUI extends JFrame {
 						});
 						thread.start();
 					}
-					
+
 					new java.util.Timer().schedule(new java.util.TimerTask() {
 						@Override
 						public void run() {
@@ -555,62 +571,85 @@ public class GUI extends JFrame {
 								findRoot();
 								Node forRemove = treeAVL.searchNode(value);
 								if (forRemove == null) {
+									enableComponents(buttonPanel, true);
 									logField.setText("node " + value + " is not exist");
 									return;
+								} else {
+									forRemove.setStatus(Node.removeColor);
+									treePanel.repaint();
 								}
-								forRemove.setStatus(Node.removeColor);
-								treePanel.repaint();
-								logField.setText("Find a replace node for remove ...");
-								treeAVL.findReplaceNodeForRemove(forRemove);
-								repaint();
-								logField.setText("Assign replaceNode's value to Remove's value ");
-								treeAVL.removeNode(forRemove);
-								treePanel.setLocation();
-								treePanel.setNodePanel(treeAVL.getTree());
-								repaint();
-								logField.setText("Find an unbalance node");
-								Node degNode = treeAVL.checkDeg();
-								repaint();
-								if (degNode != null) {
-									treeAVL.setColorForTree();
-									enableComponents(buttonPanel, false);
-									new java.util.Timer().schedule(new java.util.TimerTask() {
-										@Override
-										public void run() {
-											logField.setText("Rotating tree ...");
-											degNode.setStatus(Node.nodeColor);
-											treeAVL.typeOfRotation(degNode);
-											findRoot();
-											treePanel.setNodePanel(treeAVL.getTree());
-											treePanel.startAction();
-											enableComponents(buttonPanel, true);
-											logField.setText("Tree is rotated.");
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										logField.setText("Find a replace node for remove ...");
+										treeAVL.findReplaceNodeForRemove(forRemove);
+										repaint();
+									}
+								}, 2000);
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										treeAVL.removeNode(forRemove);
+										treePanel.setNodePanel(treeAVL.getTree());
+										treePanel.setLocation();
+										repaint();
+										logField.setText("node " + value + " removed");
+									}
+								}, 4000);
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										logField.setText("Check the tree is Unbalance ?");
+									}
+								}, 6000);
+								// check degNode
+								new java.util.Timer().schedule(new java.util.TimerTask() {
+									@Override
+									public void run() {
+										Node degNode = treeAVL.checkDeg();
+
+										if (degNode == null)
+											logField.setText("Not found unbalanced node.");
+										else {
+											logField.setText("Found an unbalanced node. Rotating tree ...");
+											repaint();
 										}
-									}, 2000);
-								}
+										if (degNode != null) {
+//											treeAVL.setColorForTree();
+											new java.util.Timer().schedule(new java.util.TimerTask() {
+												@Override
+												public void run() {
+													degNode.setStatus(Node.nodeColor);
+													treeAVL.typeOfRotation(degNode);
+													findRoot();
+													treePanel.setNodePanel(treeAVL.getTree());
+													treePanel.startAction();
+													enableComponents(buttonPanel, true);
+													logField.setText("Tree is rotated.");
+												}
+											}, 2000);
+										}
+										enableComponents(buttonPanel, true);
+
+									}
+								}, 8000);
+
+							} catch (ExceptionForProject rv2) {
 								enableComponents(buttonPanel, true);
-								if (degNode == null)
-									logField.setText("Not found unbalanced node.");
-								else {
-									logField.setText("Found an unbalanced node.");
-								}
-								logField.setText("node " + value + " removed");
-							}catch(Exception e){
-								e.printStackTrace();
-								}
+								logField.setText(rv2.notification());
 							}
-					},1000*(treePanel.listVisitedNode.size()+1));
-					
-					
+						}
+					}, 1000 * (treePanel.listVisitedNode.size() + 1));
+
 				}
 			}
 		});
 	}
 
 // ********************************************* Setting for Search Button  **************************************
-	
+
 	private void searchButtonSetting() {
-		searchButton.setBackground(new Color(33,184,191));
+		searchButton.setBackground(new Color(33, 184, 191));
 		searchButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -622,38 +661,120 @@ public class GUI extends JFrame {
 					logField.setText("'" + valueField.getText() + "' is not a number");
 					return;
 				}
-				Node result;
+
+				// ******************************* AVL ****************************************
 				if (comboboxTree.getSelectedIndex() == 0) {
-					result = treeAVL.searchNode(value);
-					treePanel.setNodePanel(treeAVL.getTree());
-					if (result == null) {
-						logField.setText("node " + value + " is not exist");
-					}else {
-						result.setStatus(Node.searchColor);
-						repaint();
-						logField.setText("node " + value + " is found");
+					treeAVL.setColorForTree();
+					repaint();
+					treePanel.listVisitedNode = treePanel.findPath(treeAVL.getTree(), value);
+					if (treePanel.listVisitedNode.size() != 0) {
+						Thread thread = new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									logField.setText("Searching " + value + ".....");
+									// them node can xoa vao list Highlight
+									for (Node i : treePanel.listVisitedNode) {
+										treeAVL.setColorForTree();
+										treePanel.repaint();
+										Node highLightNode = treeAVL.searchNode(i.getValue());
+										highLightNode.setStatus(Node.nodePath);
+										treePanel.repaint();
+										Thread.sleep(1000);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						thread.start();
 					}
+
+					new java.util.Timer().schedule(new java.util.TimerTask() {
+
+						@Override
+						public void run() {
+							try {
+								treeAVL.setColorForTree();
+								treePanel.repaint();
+								Node result;
+								result = treeAVL.searchNode(value);
+								treePanel.setNodePanel(treeAVL.getTree());
+								if (result == null) {
+									logField.setText("node " + value + " is not exist");
+								} else {
+									result.setStatus(Node.searchColor);
+									repaint();
+									logField.setText("node " + value + " is found");
+								}
+							} catch (ExceptionForProject e) {
+								logField.setText(e.notification());
+							}
+
+						}
+
+					}, treePanel.listVisitedNode.size() * 1000 + 1000);
+
 				}
+
+				// ******************************* BST ****************************************
 				else {
-					result = treeBST.searchNode(value);
-					treePanel.setNodePanel(treeBST.getTree());
-					if (result == null) {
-						logField.setText("node " + value + " is not exist");
-					}else {
-						result.setStatus(Node.searchColor);
-						repaint();
-						logField.setText("node " + value + " is found");
+					treeBST.setColorForTree();
+					repaint();
+					treePanel.listVisitedNode = treePanel.findPath(treeBST.getTree(), value);
+					if (treePanel.listVisitedNode.size() != 0) {
+						Thread thread2 = new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									logField.setText("Searching " + value + ".....");
+									// them node can xoa vao list Highlight
+									for (Node i : treePanel.listVisitedNode) {
+										treeBST.setColorForTree();
+										treePanel.repaint();
+										Node highLightNode = treeBST.searchNode(i.getValue());
+										highLightNode.setStatus(Node.nodePath);
+										treePanel.repaint();
+										Thread.sleep(1000);
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						thread2.start();
 					}
+
+					new java.util.Timer().schedule(new java.util.TimerTask() {
+
+						@Override
+						public void run() {
+							try {
+								treeBST.setColorForTree();
+								treePanel.repaint();
+								Node result;
+								result = treeBST.searchNode(value);
+								treePanel.setNodePanel(treeBST.getTree());
+								if (result == null) {
+									logField.setText("node " + value + " is not exist");
+								} else {
+									result.setStatus(Node.searchColor);
+									repaint();
+									logField.setText("node " + value + " is found");
+								}
+							} catch (ExceptionForProject e1) {
+								logField.setText(e1.notification());
+							}
+
+						}
+
+					}, treePanel.listVisitedNode.size() * 1000 + 1000);
 				}
-				 
 			}
 		});
 		buttonPanel.add(searchButton);
 	}
-//	*********************************** Highlight Path *************************************************
-	public void highLightPath() {
-		
-	}
+
 	public void findRoot() {
 		if (treeAVL.getTree() != null) {
 			Node root = treeAVL.getTree();
@@ -670,6 +791,7 @@ public class GUI extends JFrame {
 			treeBST.setTree(root);
 		}
 	}
+
 	public void paint(Graphics g) {
 		// call superclass version of method paint
 		super.paint(g);

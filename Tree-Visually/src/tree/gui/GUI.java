@@ -290,7 +290,7 @@ public class GUI extends JFrame {
 
 // ********************************************* Setting for AddRand Button  ************************************
 
-	public void addRandSetting() {
+	private void addRandSetting() {
 		addRandButton.setBackground(new Color(33, 184, 191));
 		addRandButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		addRandButton.addActionListener(new ActionListener() {
@@ -448,7 +448,7 @@ public class GUI extends JFrame {
 
 //********************************************* Setting for Remove Button  **********************************
 
-	public void removeButtonSetting() {
+	private void removeButtonSetting() {
 		removeButton.setBackground(new Color(239, 219, 0));
 		removeButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		removeButton.addActionListener(new ActionListener() {
@@ -568,7 +568,7 @@ public class GUI extends JFrame {
 						public void run() {
 							try {
 								treeAVL.setColorForTree();
-								findRoot();
+//								findRoot();
 								Node forRemove = treeAVL.searchNode(value);
 								if (forRemove == null) {
 									enableComponents(buttonPanel, true);
@@ -620,12 +620,12 @@ public class GUI extends JFrame {
 												@Override
 												public void run() {
 													degNode.setStatus(Node.nodeColor);
-													treeAVL.typeOfRotation(degNode);
-													findRoot();
+													String rotateType = treeAVL.typeOfRotation(degNode);
+//													findRoot();
 													treePanel.setNodePanel(treeAVL.getTree());
 													treePanel.startAction();
 													enableComponents(buttonPanel, true);
-													logField.setText("Tree is rotated.");
+													logField.setText("Tree is rotated with " + rotateType);
 												}
 											}, 2000);
 										}
@@ -775,22 +775,22 @@ public class GUI extends JFrame {
 		buttonPanel.add(searchButton);
 	}
 
-	public void findRoot() {
-		if (treeAVL.getTree() != null) {
-			Node root = treeAVL.getTree();
-			while (root.getParent() != null) {
-				root = root.getParent();
-			}
-			treeAVL.setTree(root);
-		}
-		if (treeBST.getTree() != null) {
-			Node root = treeBST.getTree();
-			while (root.getParent() != null) {
-				root = root.getParent();
-			}
-			treeBST.setTree(root);
-		}
-	}
+//	public void findRoot() {
+//		if (treeAVL.getTree() != null) {
+//			Node root = treeAVL.getTree();
+//			while (root.getParent() != null) {
+//				root = root.getParent();
+//			}
+//			treeAVL.setTree(root);
+//		}
+//		if (treeBST.getTree() != null) {
+//			Node root = treeBST.getTree();
+//			while (root.getParent() != null) {
+//				root = root.getParent();
+//			}
+//			treeBST.setTree(root);
+//		}
+//	}
 
 	public void paint(Graphics g) {
 		// call superclass version of method paint

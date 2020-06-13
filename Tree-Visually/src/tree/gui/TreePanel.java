@@ -191,7 +191,7 @@ public class TreePanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent ae) {
 		this.done++;
 		repaint();
-		if (this.done == (100 + 1)) {
+		if (this.done == 100) {
 			tm.stop();
 		}
 	}

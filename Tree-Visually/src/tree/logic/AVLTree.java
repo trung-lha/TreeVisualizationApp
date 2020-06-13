@@ -10,8 +10,8 @@ public class AVLTree extends BSTTree{
 	}
 	public Node checkDeg() {
 		Node deg = null;
-		checkDegAndBookMark(tree);
-		deg =  this.searchNodeDeg(tree);
+		checkDegAndBookMark(root);
+		deg =  this.searchNodeDeg(root);
 //		if (deg != null)
 //			JOptionPane.showMessageDialog(null, "gt node mcb"+ deg.getValue());
 		return deg;
@@ -143,7 +143,7 @@ public class AVLTree extends BSTTree{
 		}
 
 		if (parent == null) {
-			tree = degTree.getParent();
+			root = degTree.getParent();
 		}
 	}
 	
@@ -187,7 +187,7 @@ public class AVLTree extends BSTTree{
 		}
 		
 		if (parent == null) {
-			tree = rightGrandson;
+			root = rightGrandson;
 		}
 	}
 	
@@ -224,7 +224,7 @@ public class AVLTree extends BSTTree{
 		}
 
 		if (parent == null) {
-			tree = degTree.getParent();
+			root = degTree.getParent();
 		}
 	}
 	
@@ -268,14 +268,14 @@ public class AVLTree extends BSTTree{
 		}
 		
 		if (parent == null) {
-			tree = leftGrandson;
+			root = leftGrandson;
 		}
 	}
 	public Node searchNode(int value) throws ExceptionForProject {
 //		this.setColorForTree();
-		if (tree == null)
+		if (root == null)
 			throw new ExceptionSearch();
-		Node result = searchNode(tree, value);
+		Node result = searchNode(root, value);
 		if (result != null) {
 			return result;
 		} 

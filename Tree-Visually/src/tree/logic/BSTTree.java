@@ -5,23 +5,23 @@ import exception.ExceptionForProject;
 import exception.ExceptionSearch;
 
 public class BSTTree {
-	protected Node tree;
+	protected Node root;
 	
 	public BSTTree() {
-		tree = null;
+		root = null;
 	}
 	public BSTTree(int value) {
-		tree = new Node();
-		tree.setValue(value);
+		root = new Node();
+		root.setValue(value);
 	}
 	public Node getTree() {
-		return tree;
+		return root;
 	}
 	public void setTree(Node tree) {
-		this.tree = tree;
+		this.root = tree;
 	}
 	public void setColorForTree() {
-		this.setColorForTree(tree);
+		this.setColorForTree(root);
 	}
 	public void setColorForTree(Node localNode) {
 		if (localNode == null) {
@@ -37,12 +37,12 @@ public class BSTTree {
 	public Node addNode(int value) throws ExceptionForProject {
 		this.setColorForTree();
 		Node node = new Node(value);
-		if (tree == null) {
-			tree = node;
-			return tree;
+		if (root == null) {
+			root = node;
+			return root;
 		} else {
 			try {
-				node = addNode(tree, value);
+				node = addNode(root, value);
 				return node;
 			} catch (ExceptionForProject e) {
 				throw e;
@@ -110,10 +110,10 @@ public class BSTTree {
 	// search Node
 	public Node searchNode(int value) throws ExceptionForProject {
 		this.setColorForTree();
-		if (tree == null) {
+		if (root == null) {
 			throw new ExceptionSearch();
 		}
-		Node result = searchNode(tree, value);
+		Node result = searchNode(root, value);
 		if (result != null) {
 			return result;
 		} 
@@ -139,7 +139,7 @@ public class BSTTree {
 	}
 
 	public void clearTree() {
-		tree = null;
+		root = null;
 	}
 
 	public boolean checkLeaf(Node localNode) {

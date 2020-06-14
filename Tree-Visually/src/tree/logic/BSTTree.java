@@ -1,11 +1,15 @@
 package tree.logic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import exception.ExceptionAdd;
 import exception.ExceptionForProject;
 import exception.ExceptionSearch;
 
 public class BSTTree {
 	protected Node root;
+	public List<Node> listVisitedNode;
 	
 	public BSTTree() {
 		root = null;
@@ -209,6 +213,102 @@ public class BSTTree {
 			}
 			forRemove.setValue(forReplace.getValue());
 			removeNode(forReplace);
+		}
+	}
+	
+	// set location for each node in tree
+	public void setMoveAllNode() {
+		this.setMoveAllNode(root);
+	}
+	public void setLocation() {
+		this.setXY(root);
+	}
+	
+	public void setXY(Node localNode) {
+		if (localNode == null) {
+			return;
+		}
+		Node parent = localNode.getParent();
+		if (parent == null) {
+			localNode.setX(1200 / 2);
+			localNode.setY(10);
+		} else {
+			if (parent.getParent() == null) {
+				if (localNode.getValue() < parent.getValue()) {
+					localNode.setX(1200/ 4);
+					localNode.setY(70 + parent.getY());
+				} else {
+					localNode.setX(1200 - 1200 / 4);
+					localNode.setY(70 + parent.getY());
+				}
+			} else {
+
+				if (localNode.getValue() < parent.getValue()) {
+					localNode.setX(parent.getX() - Math.abs(parent.getX() - parent.getParent().getX()) / 2);
+					localNode.setY(70 + parent.getY());
+				} else {
+					localNode.setX(parent.getX() + Math.abs(parent.getX() - parent.getParent().getX()) / 2);
+					localNode.setY(70 + parent.getY());
+				}
+			}
+		}
+		setXY(localNode.getRightChild());
+		setXY(localNode.getLeftChild());
+	}
+	public void setMove(Node localNode, float x2, float y2) {
+		localNode.setMoveX((x2 - localNode.getX()) / 100);
+		localNode.setMoveY((y2 - localNode.getY()) / 100);
+		localNode.setNewX(x2);
+		localNode.setNewY(y2);
+	}
+
+	public void setMoveAllNode(Node localNode) {
+		if (localNode == null) {
+			return;
+		}
+		Node parent = localNode.getParent();
+		if (parent == null) {
+			setMove(localNode, 1200 / 2, 10);
+		} else {
+			if (parent.getParent() == null) {
+				if (localNode.getValue() < parent.getValue()) {
+					setMove(localNode, 1200 / 4, 70 + parent.getNewY());
+				} else {
+					setMove(localNode, 1200 - 1200 / 4, 70 + parent.getNewY());
+				}
+			} else {
+				if (localNode.getValue() < parent.getValue()) {
+					setMove(localNode, parent.getNewX() - Math.abs(parent.getNewX() - parent.getParent().getNewX()) / 2,
+							parent.getNewY() + 70);
+				} else {
+					setMove(localNode, parent.getNewX() + Math.abs(parent.getNewX() - parent.getParent().getNewX()) / 2,
+							parent.getNewY() + 70);
+				}
+			}
+		}
+		setMoveAllNode(localNode.getLeftChild());
+		setMoveAllNode(localNode.getRightChild());
+	}
+	
+	// find path node
+	public void findPath(int value) {
+		listVisitedNode = null;
+		listVisitedNode = new ArrayList();
+		findPath(root, value, listVisitedNode);
+	}
+
+	public void findPath(Node root, int value, List<Node> checkedNode) {
+		if (root == null) {
+			return;
+		}
+		if (root.getValue() == value) {
+			return;
+		} else if (root.getValue() > value) {
+			checkedNode.add(new Node(root.getValue()));
+			findPath(root.getLeftChild(), value, checkedNode);
+		} else {
+			checkedNode.add(new Node(root.getValue()));
+			findPath(root.getRightChild(), value, checkedNode);
 		}
 	}
 }

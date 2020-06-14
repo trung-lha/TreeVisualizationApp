@@ -6,125 +6,30 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import tree.logic.BSTTree;
 import tree.logic.Node;
 
 public class TreePanel extends JPanel implements ActionListener{
 	private Graphics2D g2;
-	private Node root;
-	private int done;
-	public List<Node> listVisitedNode =new ArrayList();
-	Timer tm = new Timer(25, this);
+	private BSTTree tree = new BSTTree();
+	private int step;
+	private Timer tm = new Timer(25, this);
 	
-	public List<Node> findPath(Node root, int value) {
-		List<Node> checkedNode = new ArrayList();
-		findPath(root, value, checkedNode);
-		return checkedNode;
+	public void setTreePanel(BSTTree tree) {
+		this.tree = tree;
 	}
 
-	public void findPath(Node root, int value, List<Node> checkedNode) {
-		if (root == null) {
-			return;
-		}
-		if (root.getValue() == value) {
-			return;
-		} else if (root.getValue() > value) {
-			checkedNode.add(new Node(root.getValue()));
-			findPath(root.getLeftChild(), value, checkedNode);
-		} else {
-			checkedNode.add(new Node(root.getValue()));
-			findPath(root.getRightChild(), value, checkedNode);
-		}
-	}
-
-	public void setNodePanel(Node node) {
-		this.root = node;
-	}
-
-	public Node getNodePanal() {
-		return this.root;
+	public BSTTree getTreePanal() {
+		return this.tree;
 	}
 
 	public TreePanel() {
 	}
 
-	public void setMoveAllNode() {
-		this.setMoveAllNode(root);
-	}
-	public void setLocation() {
-		this.setXY(root);
-	}
-	
-	public void setXY(Node localNode) {
-		if (localNode == null) {
-			return;
-		}
-		Node parent = localNode.getParent();
-		if (parent == null) {
-			localNode.setX(1200 / 2);
-			localNode.setY(10);
-		} else {
-			if (parent.getParent() == null) {
-				if (localNode.getValue() < parent.getValue()) {
-					localNode.setX(1200/ 4);
-					localNode.setY(70 + parent.getY());
-				} else {
-					localNode.setX(1200 - 1200 / 4);
-					localNode.setY(70 + parent.getY());
-				}
-			} else {
-
-				if (localNode.getValue() < parent.getValue()) {
-					localNode.setX(parent.getX() - Math.abs(parent.getX() - parent.getParent().getX()) / 2);
-					localNode.setY(70 + parent.getY());
-				} else {
-					localNode.setX(parent.getX() + Math.abs(parent.getX() - parent.getParent().getX()) / 2);
-					localNode.setY(70 + parent.getY());
-				}
-			}
-		}
-		setXY(localNode.getRightChild());
-		setXY(localNode.getLeftChild());
-	}
-	public void setMove(Node localNode, float x2, float y2) {
-		localNode.setMoveX((x2 - localNode.getX()) / 100);
-		localNode.setMoveY((y2 - localNode.getY()) / 100);
-		localNode.setNewX(x2);
-		localNode.setNewY(y2);
-	}
-
-	public void setMoveAllNode(Node localNode) {
-		if (localNode == null) {
-			return;
-		}
-		Node parent = localNode.getParent();
-		if (parent == null) {
-			setMove(localNode, 1200 / 2, 10);
-		} else {
-			if (parent.getParent() == null) {
-				if (localNode.getValue() < parent.getValue()) {
-					setMove(localNode, 1200 / 4, 70 + parent.getNewY());
-				} else {
-					setMove(localNode, 1200 - 1200 / 4, 70 + parent.getNewY());
-				}
-			} else {
-				if (localNode.getValue() < parent.getValue()) {
-					setMove(localNode, parent.getNewX() - Math.abs(parent.getNewX() - parent.getParent().getNewX()) / 2,
-							parent.getNewY() + 70);
-				} else {
-					setMove(localNode, parent.getNewX() + Math.abs(parent.getNewX() - parent.getParent().getNewX()) / 2,
-							parent.getNewY() + 70);
-				}
-			}
-		}
-		setMoveAllNode(localNode.getLeftChild());
-		setMoveAllNode(localNode.getRightChild());
-	}
 	public void drawTree(Node root) {
 		if (root == null) {
 			return;
@@ -178,20 +83,20 @@ public class TreePanel extends JPanel implements ActionListener{
 		super.paintComponent(g);
 		g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		drawTree(this.root);
+		drawTree(tree.getTree());
 	}
 
 	public void startAction() {
-		this.done = 0;
-		setMoveAllNode();
+		this.step = 0;
+		tree.setMoveAllNode();
 		tm.start();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		this.done++;
+		this.step++;
 		repaint();
-		if (this.done == 100) {
+		if (this.step == 100) {
 			tm.stop();
 		}
 	}

@@ -12,8 +12,6 @@ public class AVLTree extends BSTTree{
 		Node deg = null;
 		checkDegAndBookMark(root);
 		deg =  this.searchNodeDeg(root);
-//		if (deg != null)
-//			JOptionPane.showMessageDialog(null, "gt node mcb"+ deg.getValue());
 		return deg;
 	}
 	public Node searchNodeDeg(Node localNode) {
@@ -21,10 +19,8 @@ public class AVLTree extends BSTTree{
 			return null;
 		Node result = null;
 		if (localNode.getStatus() == Node.degColor) {
-//			JOptionPane.showMessageDialog(null, "Da tim duoc va tra ve");
 			return result = localNode;
 		} else {
-//			JOptionPane.showMessageDialog(null, "timt tiep");
 			result = searchNodeDeg(localNode.getLeftChild());
 			if (result != null)
 				return result;
@@ -47,15 +43,12 @@ public class AVLTree extends BSTTree{
 		} else {
 			rightHeight = localNode.getRightChild().getHeight();
 		}
-//		JOptionPane.showMessageDialog(null, localNode.getValue()+" "+leftHeight+" "+rightHeight);
 		if (Math.abs(leftHeight - rightHeight) > 1) {
-//			JOptionPane.showMessageDialog(null, " tim duoc vi tri mcb");
 			localNode.setStatus(Node.degColor);
 			return;
 		}
 		checkDegAndBookMark(localNode.getRightChild());
 		checkDegAndBookMark(localNode.getLeftChild());
-//		JOptionPane.showMessageDialog(null, "da duyet xong cay");
 	}
 
 	public Node chekDeg (Node localTree){
@@ -75,8 +68,8 @@ public class AVLTree extends BSTTree{
 
 	public String typeOfRotation(Node degTree) {
 		String rotate;
-		int leftChildHeight = getLeftHeight(degTree); // chieu cao con trai
-		int righChildtHeight = getRightHeight(degTree);	// chieu cao con phai
+		int leftChildHeight = getLeftHeight(degTree); 
+		int righChildtHeight = getRightHeight(degTree);	
 		if (leftChildHeight > righChildtHeight) {
 			Node tmpLeftChild = degTree.getLeftChild();
 
@@ -103,7 +96,6 @@ public class AVLTree extends BSTTree{
 				rotate = "left rotate";
 			} else {
 				// double left rotation
-//				JOptionPane.showMessageDialog(null, "Da vao day");
 				doubleLeftRotate(degTree);
 				rotate = "double left rotate";
 			}

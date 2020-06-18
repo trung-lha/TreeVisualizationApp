@@ -43,6 +43,7 @@ public class BSTTree {
 		Node node = new Node(value);
 		if (root == null) {
 			root = node;
+			setLocationForAllNode();
 			return root;
 		} else {
 			try {
@@ -74,10 +75,12 @@ public class BSTTree {
 			return localNode;
 		} else {
 			if (value < localNode.getValue()) {
-				
+
 				if (localNode.getLeftChild() == null) {
 					localNode.addLeftChild(newNode);
 					newNode.setParent(localNode);
+					newNode.setX(newNode.getParent().getX());
+					newNode.setY(newNode.getParent().getY());
 					recalcHeight(newNode);
 					return newNode;
 				} else {
@@ -88,6 +91,8 @@ public class BSTTree {
 				if (localNode.getRightChild() == null) {
 					localNode.addRightChild(newNode);
 					newNode.setParent(localNode);
+					newNode.setX(newNode.getParent().getX());
+					newNode.setY(newNode.getParent().getY());
 					recalcHeight(newNode);
 					return newNode;
 				} else {
@@ -220,7 +225,7 @@ public class BSTTree {
 	public void setMoveAllNode() {
 		this.setMoveAllNode(root);
 	}
-	public void setLocation() {
+	public void setLocationForAllNode() {
 		this.setXY(root);
 	}
 	

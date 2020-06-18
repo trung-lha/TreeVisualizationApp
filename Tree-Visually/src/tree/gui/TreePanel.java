@@ -15,7 +15,7 @@ import tree.logic.Node;
 
 public class TreePanel extends JPanel implements ActionListener{
 	private Graphics2D g2;
-	private BSTTree tree = new BSTTree();
+	private BSTTree tree;
 	private int step;
 	private Timer tm = new Timer(25, this);
 	
@@ -69,9 +69,6 @@ public class TreePanel extends JPanel implements ActionListener{
 		g2.fillOval((int)root.getX(),(int) root.getY(), 36, 36);
 
 		g2.setColor(Color.BLACK);
-		if (root.getStatus() == 1) {
-			g2.setColor(Color.WHITE);
-		}
 		String nodeString = root.getValue() + "";
 		g2.drawString(nodeString, root.getX() + (36-13) / 2, root.getY() + 22);
 
@@ -83,7 +80,8 @@ public class TreePanel extends JPanel implements ActionListener{
 		super.paintComponent(g);
 		g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		drawTree(tree.getTree());
+		if (tree != null)
+			drawTree(tree.getTree());
 	}
 
 	public void startAction() {

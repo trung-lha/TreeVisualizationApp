@@ -40,19 +40,19 @@ public class TreePanel extends JPanel implements ActionListener{
 		Node parent = root.getParent();
 		// draw Line for Node
 		if (parent != null) {
-			g2.setColor(Color.BLACK);
+			g2.setColor(new Color(227,242,240));
 			g2.drawLine((int) parent.getX() + 36 / 2, (int) parent.getY() + 36 - 1,
 					(int) root.getX() + 17, (int) root.getY() + 17);
 		}
 		// set color for Node
 		if (root.getStatus() == Node.nodeColor) {
-			g2.setColor(new Color(33,184,191));
+			g2.setColor(new Color(227,242,240));
 		}
 		if (root.getStatus() == Node.addColor) {
-			g2.setColor(Color.ORANGE);
+			g2.setColor(new Color(250,238,178));
 		}
 		if (root.getStatus() == Node.removeColor) {
-			g2.setColor(new Color(239,219,0));
+			g2.setColor(new Color(212,174,217));
 		}
 		if (root.getStatus() == Node.degColor) {
 			g2.setColor(Color.RED);
@@ -64,7 +64,7 @@ public class TreePanel extends JPanel implements ActionListener{
 			g2.setColor(Color.PINK);
 		}
 		if (root.getStatus() == Node.nodePath) {
-			g2.setColor(Color.BLUE);
+			g2.setColor(new Color(250,238,178));
 		}
 		g2.fillOval((int)root.getX(),(int) root.getY(), 36, 36);
 

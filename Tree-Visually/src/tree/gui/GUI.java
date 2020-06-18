@@ -63,39 +63,39 @@ public class GUI extends JFrame {
 		
 		// ****************** ADD Setting ************************
 		addButton = new JButton("Add number");
-		addButton.setBackground(new Color(33, 184, 191));
+		addButton.setBackground(new Color(227,242,240));
 		addButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		buttonPanel.add(addButton);
 
 		addRandButton = new JButton("Add random number");
-		addRandButton.setBackground(new Color(33, 184, 191));
+		addRandButton.setBackground(new Color(227,242,240));
 		addRandButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		buttonPanel.add(addRandButton);
 		
 		// ****************** Search Setting *********************
 		searchButton = new JButton("Search node");
-		searchButton.setBackground(new Color(33, 184, 191));
+		searchButton.setBackground(new Color(227,242,240));
 		searchButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		buttonPanel.add(searchButton);
 		
 		// ****************** Remove Node Setting *****************
 		removeButton = new JButton("Remove node");
-		removeButton.setBackground(new Color(239, 219, 0));
+		removeButton.setBackground(new Color(227,242,240));
 		removeButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		buttonPanel.add(removeButton);
 		
 		// ************ clear tree setting ***********************
 		clearButton = new JButton("Remove tree");
-		clearButton.setBackground(new Color(242, 96, 39));
+		clearButton.setBackground(new Color(227,242,240));
 		clearButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		buttonPanel.add(clearButton);
 		
 		// ************ Select option box setting *****************
-		comboboxTree.setBackground(new Color(33, 184, 191));
+		comboboxTree.setBackground(new Color(227,242,240));
 		comboboxTree.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		buttonPanel.add(comboboxTree);
-		buttonPanel.setBackground(new Color(226, 245, 251));
-		treePanel.setBackground(Color.WHITE);
+		buttonPanel.setBackground(new Color(49,106,99));
+		treePanel.setBackground(new Color(49,106,99));
 
 		getContentPane().add(buttonPanel, BorderLayout.NORTH);
 		getContentPane().add(treePanel, BorderLayout.CENTER);

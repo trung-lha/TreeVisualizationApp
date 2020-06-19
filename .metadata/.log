@@ -1714,7 +1714,9 @@ Caused by: java.io.IOException: Server returned HTTP response code: 503 for URL:
 	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(Unknown Source)
 	at org.eclipse.jdt.internal.core.JavaElement.getURLContents(JavaElement.java:871)
 	... 10 more
+
 !SESSION 2020-06-19 07:03:37.149 -----------------------------------------------
+
 eclipse.buildId=4.14.0.I20191210-0610
 java.version=1.8.0_251
 java.vendor=Oracle Corporation

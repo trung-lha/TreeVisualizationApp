@@ -122,7 +122,6 @@ public class GUI extends JFrame {
 					tree = new AVLTree();
 					removeActionListenerForButton();
 					AVLTree treeAVL = (AVLTree) tree;
-					
 					addButtonSettingForAVL(treeAVL);
 					addRandSettingForAVL(treeAVL);
 					searchButtonSetting();
@@ -174,9 +173,11 @@ public class GUI extends JFrame {
 									if (last > value) {
 										logField.setText(
 												"Adding " + value + ": Go to left child cause " + value + " < " + last);
-									} else {
+									} else if (last < value) {
 										logField.setText("Adding " + value + ": Go to right child cause " + value
 												+ " > " + last);
+									} else {
+										logField.setText("Adding " + value + ": Stop! Found the node with same value!");
 									}
 									Node highLightNode = tree.searchNode(i.getValue());
 									highLightNode.setStatus(Node.nodePath);
@@ -282,9 +283,11 @@ public class GUI extends JFrame {
 									if (last > value) {
 										logField.setText(
 												"Adding " + value + ": Go to left child cause " + value + " < " + last);
-									} else {
+									} else if (last < value) {
 										logField.setText("Adding " + value + ": Go to right child cause " + value
 												+ " > " + last);
+									} else {
+										logField.setText("Adding " + value + ": Stop! Found the node with same value!");
 									}
 									Node highLightNode = tree.searchNode(i.getValue());
 									highLightNode.setStatus(Node.nodePath);
@@ -359,9 +362,11 @@ public class GUI extends JFrame {
 									if (last > value) {
 										logField.setText(
 												"Adding " + value + ": Go to left child cause " + value + " < " + last);
-									} else {
+									} else if (last < value) {
 										logField.setText("Adding " + value + ": Go to right child cause " + value
 												+ " > " + last);
+									} else {
+										logField.setText("Adding " + value + ": Stop! Found the node with same value!");
 									}
 									Node highLightNode = tree.searchNode(i.getValue());
 									highLightNode.setStatus(Node.nodePath);
@@ -462,9 +467,11 @@ public class GUI extends JFrame {
 									if (last > value) {
 										logField.setText(
 												"Adding " + value + ": Go to left child cause " + value + " < " + last);
-									} else {
+									} else if (last < value) {
 										logField.setText("Adding " + value + ": Go to right child cause " + value
 												+ " > " + last);
+									} else {
+										logField.setText("Adding " + value + ": Stop! Found the node with same value!");
 									}
 									Node highLightNode = tree.searchNode(i.getValue());
 									highLightNode.setStatus(Node.nodePath);
@@ -695,7 +702,7 @@ public class GUI extends JFrame {
 									enableComponents(buttonPanel, true);
 									logField.setText("Node " + value + " removed");
 								}
-							}, 3300);
+							}, 4000);
 						} catch (ExceptionForProject rv) {
 							enableComponents(buttonPanel, true);
 							logField.setText(rv.notification());
@@ -738,6 +745,14 @@ public class GUI extends JFrame {
 									tree.setColorForTree();
 									tree.setLocationForAllNode();
 									treePanel.startAction();
+									int last = i.getValue();
+									if (last > value) {
+										logField.setText(
+												"Adding " + value + ": Go to left child cause " + value + " < " + last);
+									} else {
+										logField.setText("Adding " + value + ": Go to right child cause " + value
+												+ " > " + last);
+									}
 									Node highLightNode = tree.searchNode(i.getValue());
 									highLightNode.setStatus(Node.nodePath);
 									treePanel.repaint();

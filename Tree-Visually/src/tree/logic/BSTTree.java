@@ -307,6 +307,7 @@ public class BSTTree {
 			return;
 		}
 		if (root.getValue() == value) {
+			checkedNode.add(new Node(root.getValue()));
 			return;
 		} else if (root.getValue() > value) {
 			checkedNode.add(new Node(root.getValue()));

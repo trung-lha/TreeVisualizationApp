@@ -1,6 +1,7 @@
 package tree.gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -41,7 +42,7 @@ public class TreePanel extends JPanel implements ActionListener{
 		// draw Line for Node
 		if (parent != null) {
 			g2.setColor(new Color(227,242,240));
-			g2.drawLine((int) parent.getX() + 36 / 2, (int) parent.getY() + 36 - 1,
+			g2.drawLine((int) parent.getX() + 40 / 2, (int) parent.getY() + 40 - 1,
 					(int) root.getX() + 17, (int) root.getY() + 17);
 		}
 		// set color for Node
@@ -66,11 +67,12 @@ public class TreePanel extends JPanel implements ActionListener{
 		if (root.getStatus() == Node.nodePath) {
 			g2.setColor(new Color(250,238,178));
 		}
-		g2.fillOval((int)root.getX(),(int) root.getY(), 36, 36);
+		g2.fillOval((int)root.getX(),(int) root.getY(), 40, 40);
 
 		g2.setColor(Color.BLACK);
+		g2.setFont(new Font("Tahoma", Font.BOLD, 15));
 		String nodeString = root.getValue() + "";
-		g2.drawString(nodeString, root.getX() + (36-13) / 2, root.getY() + 22);
+		g2.drawString(nodeString, root.getX() + (40-22) / 2, root.getY() + 24);
 
 		drawTree(root.getLeftChild());
 		drawTree(root.getRightChild());

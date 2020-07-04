@@ -1,0 +1,6 @@
+Những thay đổi sau buổi bảo vệ project: 
++ Sửa lại tốc độ chạy chương trình
++ Override lại method addNode, removeNode trong class AVLTree
+Phần trăm đóng góp của các thành viên:
++ Lê Hoàng Anh Trung (20176892) : 60%
++ Trần Mình Quang    (20176853) : 40%

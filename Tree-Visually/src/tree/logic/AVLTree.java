@@ -276,9 +276,22 @@ public class AVLTree extends BSTTree{
 	public Node addNode (Node localNode, int value) throws ExceptionForProject{
 		try {
 			Node newNode = super.addNode(localNode, value);
+			checkDeg();
 			return newNode;
 		} catch (ExceptionForProject ErrorAdd) {
 			throw ErrorAdd;
 		}
+	}
+	public void removeNode(int value) throws ExceptionForProject {
+		try {
+			super.removeNode(value);
+			checkDeg();
+		} catch (ExceptionForProject rv) {
+			throw rv;
+		}
+	}
+	public void removeNode(Node forRemove) {
+		super.removeNode(forRemove);
+		checkDeg();
 	}
 }

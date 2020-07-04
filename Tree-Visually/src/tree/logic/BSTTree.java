@@ -5,6 +5,7 @@ import java.util.List;
 
 import exception.ExceptionAdd;
 import exception.ExceptionForProject;
+import exception.ExceptionRemove;
 import exception.ExceptionSearch;
 
 public class BSTTree {
@@ -182,7 +183,17 @@ public class BSTTree {
 		}
 		
 	}
-	
+	public void removeNode(int value) throws ExceptionForProject{
+		Node nodeToRemove = null;
+		try {
+			nodeToRemove = searchNode(value);
+		} catch (ExceptionForProject e) {
+			throw new ExceptionSearch();
+		}
+		if (nodeToRemove == null) {
+			throw new ExceptionRemove();
+		} else removeNode(nodeToRemove);
+	}
 	public void removeNode(Node forRemove) {
 		Node parent = forRemove.getParent(); // cha cua node can xoa
 		Node leftChild = forRemove.getLeftChild();

@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workingSetManager>
-<workingSet editPageId="org.eclipse.jdt.internal.ui.DynamicSourcesWorkingSet" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1590393685096_0" label="Java Main Sources" name="Java Main Sources">
-<item elementID="=AVL-Tree/src" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<workingSet editPageId="org.eclipse.jdt.internal.ui.DynamicSourcesWorkingSet" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1593879656101_0" label="Java Main Sources" name="Java Main Sources">
+<item elementID="=Tree-Visually/src" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
 </workingSet>
-<workingSet editPageId="org.eclipse.jdt.internal.ui.DynamicSourcesWorkingSet" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1590393685121_1" label="Java Test Sources" name="Java Test Sources"/>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1590393702429_2" label="Window Working Set" name="Aggregate for window 1590393702428"/>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1590398057821_3" label="Window Working Set" name="Aggregate for window 1590398057821"/>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1590592539739_4" label="Window Working Set" name="Aggregate for window 1590592539739"/>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1591437370472_5" label="Window Working Set" name="Aggregate for window 1591437370472"/>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1591551464207_6" label="Window Working Set" name="Aggregate for window 1591551464207"/>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1591595614831_7" label="Window Working Set" name="Aggregate for window 1591595614831"/>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1591623923017_8" label="Window Working Set" name="Aggregate for window 1591623923017"/>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1591685402627_9" label="Window Working Set" name="Aggregate for window 1591685402627"/>
+<workingSet editPageId="org.eclipse.jdt.internal.ui.DynamicSourcesWorkingSet" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1593879656120_1" label="Java Test Sources" name="Java Test Sources"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1593879662127_2" label="Window Working Set" name="Aggregate for window 1593879662126"/>
 </workingSetManager>
